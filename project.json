@@ -1,4 +1,6 @@
 ﻿{
+  "name": "Coolector.Common",
+  "authors": ["Noordwind"],
   "title": "Coolector.Common",
   "version": "1.0.0-*",
   "packOptions": {
@@ -20,10 +22,5 @@
   },
   "configurations": {
     "Dev": {}
-  },
-  "scripts": {
-    "postcompile": [
-      "dotnet pack --no-build -o Nuget"
-    ]
   }
 }
