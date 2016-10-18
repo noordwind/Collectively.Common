@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Coolector.Common</id>
+    <version>1.0.0</version>
+    <authors>Piotr Gankiewicz, Grzegorz Paśnik</authors>
+    <description>Coolector.Common package.</description>
+    <language>en-US</language>
+    <projectUrl>https://github.com/noordwind/Coolector.Common</projectUrl>
+    <licenseUrl>https://github.com/noordwind/Coolector.Common/blob/master/LICENSE</licenseUrl>
+  </metadata>
+</package>
