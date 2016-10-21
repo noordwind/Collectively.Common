@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Coolector.Common.Events.Remarks.Models;
 
 namespace Coolector.Common.Events.Remarks
@@ -8,7 +9,7 @@ namespace Coolector.Common.Events.Remarks
         public Guid RemarkId { get; }
         public string UserId { get; set; }
         public RemarkCategory Category { get; }
-        public RemarkFile Photo { get; }
+        public IEnumerable<RemarkFile> Photos { get; }
         public RemarkLocation Location { get; }
         public string Description { get; }
 
@@ -18,13 +19,13 @@ namespace Coolector.Common.Events.Remarks
 
         public RemarkCreated(Guid remarkId, string userId, 
             RemarkCategory category, RemarkLocation location,
-            RemarkFile photo, string description)
+            IEnumerable<RemarkFile> photos, string description)
         {
             RemarkId = remarkId;
             UserId = userId;
             Category = category;
             Location = location;
-            Photo = photo;
+            Photos = photos;
             Description = description;
         }
 

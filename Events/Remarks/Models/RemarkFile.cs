@@ -2,22 +2,17 @@
 {
     public class RemarkFile
     {
-        public string InternalId { get; }
-        public byte[] Bytes { get; }
-        public string Name { get; }
-        public string ContentType { get; }
+        public string Size { get; }
+        public string Url { get; }
+        public string Metadata { get; }
+        
+        protected RemarkFile() {}
 
-        protected RemarkFile()
+        public RemarkFile(string size, string url, string metadata)
         {
-        }
-
-        public RemarkFile(string internalId, byte[] bytes,
-            string name, string contentType)
-        {
-            InternalId = internalId;
-            Bytes = bytes;
-            Name = name;
-            ContentType = contentType;
+            Size = size;
+            Url = url;
+            Metadata = metadata;
         }
     }
 }
