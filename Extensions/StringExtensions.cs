@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Coolector.Common.Queries;
+using System.Reflection;
 
 namespace Coolector.Common.Extensions
 {
@@ -58,5 +60,27 @@ namespace Coolector.Common.Extensions
             => values.Aggregate((x, y) => $"{x.Trim()}\n{y.Trim()}");
 
         public static bool IsEmail(this string value) => value.NotEmpty() && EmailRegex.IsMatch(value);
+
+        public static string ToQueryString(this string endpoint, IQuery query)
+        {
+            if (query == null)
+                return endpoint;
+
+            var values = new List<string>();
+            foreach (var property in query.GetType().GetProperties())
+            {
+                var value = property.GetValue(query, null);
+                var collection = value as IEnumerable<string>;
+                if (collection != null)
+                {
+                    values.Add($"{property.Name.ToLowerInvariant()}={string.Join(",", collection)}");
+                    continue;
+                }
+                values.Add($"{property.Name.ToLowerInvariant()}={value}");
+            }
+
+            var endpointQuery = string.Join("&", values);
+            return $"{endpoint}?{endpointQuery}";
+        }
     }
 }
