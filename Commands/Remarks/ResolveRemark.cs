@@ -10,5 +10,7 @@ namespace Coolector.Common.Commands.Remarks
         public RemarkFile Photo { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public bool ValidatePhoto { get; set; }
+        public bool ValidateLocation { get; set; }
     }
 }
