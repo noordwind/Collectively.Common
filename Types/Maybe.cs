@@ -24,6 +24,8 @@ namespace Coolector.Common.Types
             _value = value;
         }
 
+        public static Maybe<T> Empty => new Maybe<T>();
+
         public static implicit operator Maybe<T>(T value) => new Maybe<T>(value);
 
         public static bool operator ==(Maybe<T> maybe, T value) => !maybe.HasNoValue && maybe.Value.Equals(value);
