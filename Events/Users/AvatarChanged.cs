@@ -2,7 +2,7 @@
 
 namespace Coolector.Common.Events.Users
 {
-    public class AvatarChanged : IEvent
+    public class AvatarChanged : IAuthenticatedEvent
     {
         public Guid RequestId { get; }
         public string UserId { get;}
