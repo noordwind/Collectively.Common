@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Coolector.Common.Types;
 using System.Linq;
+using System.Net.Http.Headers;
 using Coolector.Common.Queries;
+using Nancy.Helpers;
 
 namespace Coolector.Common.Extensions
 {
@@ -51,6 +53,45 @@ namespace Coolector.Common.Extensions
                 .Take(resultsPerPage);
 
             return data;
+        }
+
+        public static PagedResult<T> ToPagedResult<T>(this IEnumerable<T> collection, HttpResponseHeaders headers)
+        {
+            var totalResults = headers.GetValues("X-Total-Count").FirstOrDefault();
+            var totalResultsInt = int.Parse(totalResults);
+
+            var link = headers.GetValues("Link").First();
+            var totalPages = int.Parse(GetValueFromLink(link, "last", "page"));
+
+            var currentPage = 0;
+            var nextPage = GetValueFromLink(link, "next", "page");
+            var prevPage = GetValueFromLink(link, "prev", "page");
+            if (nextPage != null)
+                currentPage = int.Parse(nextPage) - 1;
+            else if (prevPage != null)
+                currentPage = int.Parse(prevPage) + 1;
+
+            var resultsPerPage = int.Parse(GetValueFromLink(link, "first", "results"));
+
+            return PagedResult<T>.Create(collection, currentPage, resultsPerPage, totalPages, totalResultsInt);
+        }
+
+        private static string GetValueFromLink(string link, string rel, string paramName)
+        {
+            var specificLink = link.Split(',')
+                .FirstOrDefault(x => x.Contains(rel));
+
+            if (specificLink == null)
+                return null;
+
+            specificLink = specificLink.Split(';').First()
+                .Remove(specificLink.IndexOf('>'), 1)
+                .Remove(specificLink.IndexOf('<'), 1);
+
+            var uri = new Uri(specificLink);
+            var param = HttpUtility.ParseQueryString(uri.Query).Get(paramName);
+
+            return param;
         }
     }
 }
