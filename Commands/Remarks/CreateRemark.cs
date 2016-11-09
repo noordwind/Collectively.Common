@@ -1,9 +1,11 @@
-﻿using Coolector.Common.Commands.Remarks.Models;
+﻿using System;
+using Coolector.Common.Commands.Remarks.Models;
 
 namespace Coolector.Common.Commands.Remarks
 {
     public class CreateRemark : IAuthenticatedCommand
     {
+        public Guid RemarkId { get; set; }
         public Request Request { get; set; }
         public string UserId { get; set; }
         public string Category { get; set; }
