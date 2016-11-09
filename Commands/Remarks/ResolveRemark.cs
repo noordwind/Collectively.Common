@@ -5,6 +5,7 @@ namespace Coolector.Common.Commands.Remarks
 {
     public class ResolveRemark : IAuthenticatedCommand
     {
+        public Request Request { get; set; }
         public string UserId { get; set; }
         public Guid RemarkId { get; set; }
         public RemarkFile Photo { get; set; }

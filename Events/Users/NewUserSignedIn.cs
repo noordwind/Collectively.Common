@@ -4,6 +4,7 @@ namespace Coolector.Common.Events.Users
 {
     public class NewUserSignedIn : IEvent
     {
+        public Guid RequestId { get; }
         public string UserId { get; }
         public string Email { get; }
         public string Name { get; }
@@ -16,9 +17,10 @@ namespace Coolector.Common.Events.Users
         {
         }
 
-        public NewUserSignedIn(string userId, string email, string name, 
+        public NewUserSignedIn(Guid requestId, string userId, string email, string name,
             string pictureUrl, string role, string state, DateTime createdAt)
         {
+            RequestId = requestId;
             UserId = userId;
             Email = email;
             Name = name;

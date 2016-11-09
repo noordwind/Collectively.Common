@@ -6,6 +6,7 @@ namespace Coolector.Common.Events.Remarks
 {
     public class RemarkCreated : IAuthenticatedEvent
     {
+        public Guid RequestId { get; }
         public Guid RemarkId { get; }
         public string UserId { get; set; }
         public RemarkCategory Category { get; }
@@ -17,10 +18,11 @@ namespace Coolector.Common.Events.Remarks
         {
         }
 
-        public RemarkCreated(Guid remarkId, string userId, 
+        public RemarkCreated(Guid requestId, Guid remarkId, string userId,
             RemarkCategory category, RemarkLocation location,
             IEnumerable<RemarkFile> photos, string description)
         {
+            RequestId = requestId;
             RemarkId = remarkId;
             UserId = userId;
             Category = category;

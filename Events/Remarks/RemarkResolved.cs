@@ -6,6 +6,7 @@ namespace Coolector.Common.Events.Remarks
 {
     public class RemarkResolved : IEvent
     {
+        public Guid RequestId { get; }
         public Guid RemarkId { get; }
         public string UserId { get; }
         public IEnumerable<RemarkFile> Photos { get; }
@@ -13,8 +14,10 @@ namespace Coolector.Common.Events.Remarks
 
         protected RemarkResolved() { }
 
-        public RemarkResolved(Guid remarkId, string userId, IEnumerable<RemarkFile> photos, DateTime resolvedAt)
+        public RemarkResolved(Guid requestId, Guid remarkId, string userId,
+            IEnumerable<RemarkFile> photos, DateTime resolvedAt)
         {
+            RequestId = requestId;
             RemarkId = remarkId;
             UserId = userId;
             Photos = photos;
