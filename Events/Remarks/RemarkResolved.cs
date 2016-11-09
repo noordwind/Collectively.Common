@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Coolector.Common.Events.Remarks
 {
-    public class RemarkResolved : IEvent
+    public class RemarkResolved : IAuthenticatedEvent
     {
         public Guid RequestId { get; }
         public Guid RemarkId { get; }
@@ -12,7 +12,9 @@ namespace Coolector.Common.Events.Remarks
         public IEnumerable<RemarkFile> Photos { get; }
         public DateTime ResolvedAt { get; }
 
-        protected RemarkResolved() { }
+        protected RemarkResolved()
+        {
+        }
 
         public RemarkResolved(Guid requestId, Guid remarkId, string userId,
             IEnumerable<RemarkFile> photos, DateTime resolvedAt)

@@ -8,7 +8,7 @@ namespace Coolector.Common.Events.Remarks
     {
         public Guid RequestId { get; }
         public Guid RemarkId { get; }
-        public string UserId { get; set; }
+        public string UserId { get; }
         public RemarkCategory Category { get; }
         public IEnumerable<RemarkFile> Photos { get; }
         public RemarkLocation Location { get; }

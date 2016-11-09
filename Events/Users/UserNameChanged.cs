@@ -5,7 +5,7 @@ namespace Coolector.Common.Events.Users
     public class UserNameChanged : IAuthenticatedEvent
     {
         public Guid RequestId { get; }
-        public string UserId { get; set; }
+        public string UserId { get; }
         public string NewName { get; }
 
         protected UserNameChanged()

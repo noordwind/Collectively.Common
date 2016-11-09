@@ -5,8 +5,8 @@ namespace Coolector.Common.Events.Users
     public class AvatarChanged : IEvent
     {
         public Guid RequestId { get; }
-        public string UserId { get; set; }
-        public string PictureUrl { get; set; }
+        public string UserId { get;}
+        public string PictureUrl { get; }
 
         protected AvatarChanged()
         {
