@@ -11,6 +11,7 @@ namespace Coolector.Common.Events.Users
         public string PictureUrl { get; }
         public string Role { get; }
         public string State { get; }
+        public string Provider { get; }
         public DateTime CreatedAt { get; }
 
         protected NewUserSignedIn()
@@ -18,7 +19,7 @@ namespace Coolector.Common.Events.Users
         }
 
         public NewUserSignedIn(Guid requestId, string userId, string email, string name,
-            string pictureUrl, string role, string state, DateTime createdAt)
+            string pictureUrl, string role, string state, string provider, DateTime createdAt)
         {
             RequestId = requestId;
             UserId = userId;
@@ -27,6 +28,7 @@ namespace Coolector.Common.Events.Users
             PictureUrl = pictureUrl;
             Role = role;
             State = state;
+            Provider = provider;
             CreatedAt = createdAt;
         }
     }
