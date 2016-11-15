@@ -2,7 +2,7 @@
 
 namespace Coolector.Common.Commands.Users
 {
-    public class Authenticate : ICommand
+    public class SignIn : ICommand
     {
         public Request Request { get; set; }
         public Guid SessionId { get; set; }
@@ -10,5 +10,7 @@ namespace Coolector.Common.Commands.Users
         public string Password { get; set; }
         public string IpAddress { get; set; }
         public string UserAgent { get; set; }
+        public string AccessToken { get; set; }
+        public string Provider { get; set; }
     }
 }
