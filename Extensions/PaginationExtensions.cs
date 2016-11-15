@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Coolector.Common.Types;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using Coolector.Common.Queries;
 using Nancy.Helpers;
 
@@ -78,16 +79,21 @@ namespace Coolector.Common.Extensions
 
         private static string GetValueFromLink(string link, string rel, string paramName)
         {
-            var specificLink = link.Split(',')
-                .FirstOrDefault(x => x.Contains(rel));
+            const string relRegex = "rel=..([a-z])+..";
+            const string urlRegex = @"\b(?:https?://|www\.)\S+\b";
+            
+            var rels = Regex.Matches(link, relRegex)
+                .Cast<Match>()
+                .Select(match => match.Value)
+                .ToList();
+            var index = rels.FindIndex(s => s.Contains(rel));
 
-            if (specificLink == null)
+            if (index < 0)
                 return null;
 
-            specificLink = specificLink.Split(';').First()
-                .Remove(specificLink.IndexOf('>'), 1)
-                .Remove(specificLink.IndexOf('<'), 1);
-
+            var links = Regex.Matches(link, urlRegex);
+            var specificLink = links[index].Value;
+            
             var uri = new Uri(specificLink);
             var param = HttpUtility.ParseQueryString(uri.Query).Get(paramName);
 
