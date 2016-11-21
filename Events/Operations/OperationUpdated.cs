@@ -7,6 +7,7 @@ namespace Coolector.Common.Events.Operations
         public Guid RequestId { get; }
         public string UserId { get; }
         public string State { get; }
+        public string Code { get; }
         public DateTime UpdatedAt { get; }
         public string Message { get; }
 
@@ -16,14 +17,15 @@ namespace Coolector.Common.Events.Operations
 
         public OperationUpdated(Guid requestId,
             string userId, string state,
-            DateTime updatedAt, 
-            string message)
+            string code, string message,
+            DateTime updatedAt)
         {
             RequestId = requestId;
             UserId = userId;
             State = state;
-            UpdatedAt = updatedAt;
+            Code = code;
             Message = message;
+            UpdatedAt = updatedAt;
         }
     }
 }
