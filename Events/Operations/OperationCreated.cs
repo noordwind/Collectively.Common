@@ -10,10 +10,7 @@ namespace Coolector.Common.Events.Operations
         public string Origin { get; }
         public string Resource { get; }
         public string State { get; }
-        public string Code { get; }
-        public string Message { get; }
         public DateTime CreatedAt { get; }
-        public DateTime UpdatedAt { get; }
 
         protected OperationCreated()
         {
@@ -21,8 +18,7 @@ namespace Coolector.Common.Events.Operations
 
         public OperationCreated(Guid requestId, string name,
             string userId, string origin, string resource,
-            string state, string code, string message,
-            DateTime createdAt, DateTime updatedAt)
+            string state, DateTime createdAt)
         {
             RequestId = requestId;
             Name = name;
@@ -30,10 +26,7 @@ namespace Coolector.Common.Events.Operations
             Origin = origin;
             Resource = resource;
             State = state;
-            Code = code;
-            Message = message;
             CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
         }
     }
 }

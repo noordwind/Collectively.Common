@@ -8,8 +8,8 @@ namespace Coolector.Common.Events.Operations
         public string UserId { get; }
         public string State { get; }
         public string Code { get; }
-        public DateTime UpdatedAt { get; }
         public string Message { get; }
+        public DateTime UpdatedAt { get; }
 
         protected OperationUpdated()
         {
