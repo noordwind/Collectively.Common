@@ -10,6 +10,7 @@
         public static string InvalidEmail => "invalid_email";
         public static string InvalidPassword => "invalid_password";
         public static string InvalidFile => "invalid_file";
+        public static string InvalidCurrentPassword => "invalid_current_password";
         public static string FileTooBig => "file_too_big";
         public static string TextTooLong => "text_too_long";
         public static string Error => "error";
