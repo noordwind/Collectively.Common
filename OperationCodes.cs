@@ -16,5 +16,6 @@
         public static string FileTooBig => "file_too_big";
         public static string TextTooLong => "text_too_long";
         public static string Error => "error";
+        public static string InvalidUser => "invalid_user";
     }
 }
