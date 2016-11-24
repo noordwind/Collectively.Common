@@ -6,10 +6,16 @@ namespace Coolector.Common.Encryption
 {
     public class Encrypter : IEncrypter
     {
-        private const int MinSaltSize = 8;
-        private const int MaxSaltSize = 12;
-        private const int MinSecureKeySize = 40;
-        private const int MaxSecureKeySize = 60;
+        private static readonly string[] InvalidCharacters =
+        {
+            "+", "/", "\\", "=", "-", "_", "&", "?", ",", ".", ";", " ", "<", ">", "~", "!",
+            ":", "'", "\"", "[", "]", "{", "}", "|", "%", "#", "$", "^", "8", "(", ")"
+        };
+
+        private static readonly int MinSaltSize = 8;
+        private static readonly int MaxSaltSize = 12;
+        private static readonly int MinSecureKeySize = 40;
+        private static readonly int MaxSecureKeySize = 60;
         private static readonly Random Random = new Random();
 
         public string GetRandomSecureKey()
@@ -19,8 +25,14 @@ namespace Coolector.Common.Encryption
             using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(bytes);
+                var base64String = Convert.ToBase64String(bytes);
+                var stringBuilder = new StringBuilder(base64String);
+                foreach (var invalidCharacter in InvalidCharacters)
+                {
+                    stringBuilder.Replace(invalidCharacter, string.Empty);
+                }
 
-                return Convert.ToBase64String(bytes);
+                return stringBuilder.ToString();
             }
         }
 
