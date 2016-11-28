@@ -6,17 +6,21 @@ using Coolector.Common.Queries;
 using Coolector.Common.Types;
 using Nancy;
 using Nancy.Responses.Negotiation;
+using NLog;
+using System.Linq;
 
 namespace Coolector.Common.Nancy
 {
     public class FetchRequestHandler<TQuery, TResult> where TQuery : IQuery, new() where TResult : class
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly string PageParameter = "page";
         private readonly TQuery _query;
         private readonly Func<TQuery, Task<Maybe<TResult>>> _fetch;
         private readonly Func<TQuery, Task<Maybe<PagedResult<TResult>>>> _fetchCollection;
         private readonly Negotiator _negotiator;
         private readonly Url _url;
+        private Func<TResult, object> _mapper;
 
         public FetchRequestHandler(TQuery query, Func<TQuery, Task<Maybe<TResult>>> fetch, Negotiator negotiator,
             Url url)
@@ -34,6 +38,13 @@ namespace Coolector.Common.Nancy
             _fetchCollection = fetchCollection;
             _negotiator = negotiator;
             _url = url;
+        }
+
+        public FetchRequestHandler<TQuery, TResult> MapTo(Func<TResult, object> mapper)
+        {
+            _mapper = mapper;
+
+            return this;
         }
 
         public async Task<Negotiator> HandleAsync()
@@ -62,17 +73,27 @@ namespace Coolector.Common.Nancy
         private Negotiator FromResult(Maybe<TResult> result)
         {
             if (result.HasNoValue)
+            {
+                Logger.Debug($"Result of {_query.GetType().Name} has no value {typeof(TResult).Name}");
                 return _negotiator.WithStatusCode(HttpStatusCode.NotFound);
+            }
+            Logger.Debug($"Result of {_query.GetType().Name} contains {typeof(TResult).Name} object");
+            var model = _mapper == null ? result.Value : _mapper(result.Value);
 
-            return _negotiator.WithModel(result.Value);
+            return _negotiator.WithModel(model);
         }
 
         private Negotiator FromPagedResult(Maybe<PagedResult<TResult>> result)
         {
             if (result.HasNoValue)
+            {
+                Logger.Debug($"Result of {_query.GetType().Name} has no value {typeof(TResult).Name}");
                 return _negotiator.WithModel(new List<object>());
+            }
+            Logger.Debug($"Result of {_query.GetType().Name} contains {result.Value.TotalResults} {typeof(TResult).Name} elements");
+            var model = _mapper == null ? result.Value.Items : result.Value.Items.Select(x => _mapper(x));
 
-            return _negotiator.WithModel(result.Value.Items)
+            return _negotiator.WithModel(model)
                 .WithHeader("Link", GetLinkHeader(result.Value))
                 .WithHeader("X-Total-Count", result.Value.TotalResults.ToString());
         }
