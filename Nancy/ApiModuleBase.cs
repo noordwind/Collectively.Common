@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using AutoMapper;
 using Coolector.Common.Queries;
 using Coolector.Common.Types;
 using Nancy;
@@ -12,11 +13,16 @@ namespace Coolector.Common.Nancy
 {
     public abstract class ApiModuleBase : NancyModule
     {
-        protected static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        protected readonly IMapper Mapper;
 
-        protected ApiModuleBase(string modulePath = "")
+        protected ApiModuleBase(string modulePath = "") 
+            : base(modulePath)
+        { }
+
+        protected ApiModuleBase(IMapper mapper, string modulePath = "")
             : base(modulePath)
         {
+            Mapper = mapper;
         }
 
         protected FetchRequestHandler<TQuery, TResult> Fetch<TQuery, TResult>(Func<TQuery, Task<Maybe<TResult>>> fetch)
@@ -24,7 +30,7 @@ namespace Coolector.Common.Nancy
         {
             var query = BindRequest<TQuery>();
 
-            return new FetchRequestHandler<TQuery, TResult>(query, fetch, Negotiate, Request.Url);
+            return new FetchRequestHandler<TQuery, TResult>(query, fetch, Negotiate, Request.Url, Mapper);
         }
 
         protected FetchRequestHandler<TQuery, TResult> FetchCollection<TQuery, TResult>(
@@ -33,7 +39,7 @@ namespace Coolector.Common.Nancy
         {
             var query = BindRequest<TQuery>();
 
-            return new FetchRequestHandler<TQuery, TResult>(query, fetch, Negotiate, Request.Url);
+            return new FetchRequestHandler<TQuery, TResult>(query, fetch, Negotiate, Request.Url, Mapper);
         }
 
         protected T BindRequest<T>() where T : new()
