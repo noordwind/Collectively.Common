@@ -12,16 +12,18 @@ namespace Coolector.Common.Commands
         public string Culture { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public static Request From<T>(Request request) => Create<T>(request.Origin, request.Resource, request.Culture);
+        public static Request From<T>(Request request)
+            => Create<T>(request.Id, request.Origin, request.Culture, request.Resource);
 
-        public static Request Create<T>(string origin, string resource, string culture) => new Request
-        {
-            Id = Guid.NewGuid(),
-            Name = typeof(T).Name.Humanize(LetterCasing.LowerCase).Underscore(),
-            Origin = origin.StartsWith("/") ? origin.Remove(0, 1) : origin,
-            Resource = resource,
-            Culture = culture,
-            CreatedAt = DateTime.UtcNow
-        };
+        public static Request Create<T>(Guid id, string origin, string culture, string resource = "")
+            => new Request
+            {
+                Id = id,
+                Name = typeof(T).Name.Humanize(LetterCasing.LowerCase).Underscore(),
+                Origin = origin.StartsWith("/") ? origin.Remove(0, 1) : origin,
+                Culture = culture,
+                Resource = resource,
+                CreatedAt = DateTime.UtcNow
+            };
     }
 }
