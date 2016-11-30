@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Coolector.Common.Domain;
+using NLog;
 
 namespace Coolector.Common.Services
 {
     public class HandlerTask : IHandlerTask
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IHandler _handler;
         private readonly Action _run;
         private readonly Func<Task> _runAsync;
@@ -14,9 +16,13 @@ namespace Coolector.Common.Services
         private Action _onSuccess;
         private Func<Task> _onSuccessAsync;
         private Action<Exception> _onError;
+        private Action<Exception, Logger> _onErrorWithLogger;
         private Action<CoolectorException> _onCustomError;
+        private Action<CoolectorException, Logger> _onCustomErrorWithLogger;
         private Func<Exception, Task> _onErrorAsync;
+        private Func<Exception, Logger, Task> _onErrorWithLoggerAsync;
         private Func<CoolectorException, Task> _onCustomErrorAsync;
+        private Func<CoolectorException, Logger, Task> _onCustomErrorWithLoggerAsync;
         private bool _propagateException = true;
 
         public HandlerTask(IHandler handler, Action run)
@@ -53,9 +59,25 @@ namespace Coolector.Common.Services
             return this;
         }
 
+        public IHandlerTask OnCustomError(Action<CoolectorException, Logger> onCustomError, bool propagateException = false)
+        {
+            _onCustomErrorWithLogger = onCustomError;
+            _propagateException = propagateException;
+
+            return this;
+        }
+
         public IHandlerTask OnCustomError(Func<CoolectorException, Task> onCustomError, bool propagateException = false)
         {
             _onCustomErrorAsync = onCustomError;
+            _propagateException = propagateException;
+
+            return this;
+        }
+
+        public IHandlerTask OnCustomError(Func<CoolectorException, Logger, Task> onCustomError, bool propagateException = false)
+        {
+            _onCustomErrorWithLoggerAsync = onCustomError;
             _propagateException = propagateException;
 
             return this;
@@ -69,6 +91,14 @@ namespace Coolector.Common.Services
             return this;
         }
 
+        public IHandlerTask OnError(Action<Exception, Logger> onError, bool propagateException = false)
+        {
+            _onErrorWithLogger = onError;
+            _propagateException = propagateException;
+
+            return this;
+        }
+
         public IHandlerTask OnError(Func<Exception, Task> onError, bool propagateException = false)
         {
             _onErrorAsync = onError;
@@ -77,6 +107,13 @@ namespace Coolector.Common.Services
             return this;
         }
 
+        public IHandlerTask OnError(Func<Exception, Logger, Task> onError, bool propagateException = false)
+        {
+            _onErrorWithLoggerAsync = onError;
+            _propagateException = propagateException;
+
+            return this;
+        }
 
         public IHandlerTask OnSuccess(Action onSuccess)
         {
@@ -120,8 +157,10 @@ namespace Coolector.Common.Services
                 var customException = exception as CoolectorException;
                 if (customException != null)
                 {
+                    _onCustomErrorWithLogger?.Invoke(customException, Logger);
                     _onCustomError?.Invoke(customException);
                 }
+                _onErrorWithLogger?.Invoke(customException, Logger);
                 _onError?.Invoke(exception);
                 if(_propagateException)
                 {
@@ -147,10 +186,25 @@ namespace Coolector.Common.Services
             catch (Exception exception)
             {
                 var customException = exception as CoolectorException;
-                if (_onCustomErrorAsync != null && customException != null)
+                if (customException != null)
                 {
-                    await _onCustomErrorAsync(customException);
+                    _onCustomErrorWithLogger?.Invoke(customException, Logger);
+                    if (_onCustomErrorWithLoggerAsync != null)
+                    {
+                        await _onCustomErrorWithLoggerAsync(customException, Logger);
+                    }
+                    _onCustomError?.Invoke(customException);
+                    if (_onCustomErrorAsync != null)
+                    {
+                        await _onCustomErrorAsync(customException);
+                    }
                 }
+                _onErrorWithLogger?.Invoke(customException, Logger);
+                if (_onErrorWithLoggerAsync != null)
+                {
+                    await _onErrorWithLoggerAsync(exception, Logger);
+                }
+                _onError?.Invoke(exception);
                 if (_onErrorAsync != null)
                 {
                     await _onErrorAsync(exception);
