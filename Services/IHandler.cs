@@ -7,7 +7,7 @@ namespace Coolector.Common.Services
     {
         IHandlerTask Run(Action action);
         IHandlerTask Run(Func<Task> actionAsync);
-        void Execute();
-        Task ExecuteAsync();
+        void ExecuteAll();
+        Task ExecuteAllAsync();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Coolector.Common.Domain;
 
 namespace Coolector.Common.Services
 {
@@ -13,7 +14,9 @@ namespace Coolector.Common.Services
         private Action _onSuccess;
         private Func<Task> _onSuccessAsync;
         private Action<Exception> _onError;
+        private Action<CoolectorException> _onCustomError;
         private Func<Exception, Task> _onErrorAsync;
+        private Func<CoolectorException, Task> _onCustomErrorAsync;
         private bool _propagateException = true;
 
         public HandlerTask(IHandler handler, Action run)
@@ -38,6 +41,22 @@ namespace Coolector.Common.Services
         public IHandlerTask Always(Func<Task> always)
         {
             _alwaysAsync = always;
+
+            return this;
+        }
+
+        public IHandlerTask OnCustomError(Action<CoolectorException> onCustomError, bool propagateException = false)
+        {
+            _onCustomError = onCustomError;
+            _propagateException = propagateException;
+
+            return this;
+        }
+
+        public IHandlerTask OnCustomError(Func<CoolectorException, Task> onCustomError, bool propagateException = false)
+        {
+            _onCustomErrorAsync = onCustomError;
+            _propagateException = propagateException;
 
             return this;
         }
@@ -98,6 +117,11 @@ namespace Coolector.Common.Services
             }
             catch (Exception exception)
             {
+                var customException = exception as CoolectorException;
+                if (customException != null)
+                {
+                    _onCustomError?.Invoke(customException);
+                }
                 _onError?.Invoke(exception);
                 if(_propagateException)
                 {
@@ -122,6 +146,11 @@ namespace Coolector.Common.Services
             }
             catch (Exception exception)
             {
+                var customException = exception as CoolectorException;
+                if (_onCustomErrorAsync != null && customException != null)
+                {
+                    await _onCustomErrorAsync(customException);
+                }
                 if (_onErrorAsync != null)
                 {
                     await _onErrorAsync(exception);

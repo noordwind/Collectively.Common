@@ -24,7 +24,7 @@ namespace Coolector.Common.Services
             return handlerTask;
         }
 
-        public void Execute()
+        public void ExecuteAll()
         {
             foreach (var handlerTask in _handlerTasks)
             {
@@ -32,7 +32,7 @@ namespace Coolector.Common.Services
             }
         }
 
-        public async Task ExecuteAsync()
+        public async Task ExecuteAllAsync()
         {
             foreach (var handlerTask in _handlerTasks)
             {
