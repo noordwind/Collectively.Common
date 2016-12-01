@@ -1,4 +1,4 @@
-﻿namespace Coolector.Common.Encryption
+﻿namespace Coolector.Common.Services
 {
     public interface IEncrypter
     {

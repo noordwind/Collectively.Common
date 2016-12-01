@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Coolector.Common.Encryption
+namespace Coolector.Common.Services
 {
     public class Encrypter : IEncrypter
     {
