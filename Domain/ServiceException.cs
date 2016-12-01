@@ -8,7 +8,7 @@ namespace Coolector.Common.Domain
         {
         }
 
-        public ServiceException(string code)
+        public ServiceException(string code) : base(code)
         {
         }
 
@@ -16,7 +16,7 @@ namespace Coolector.Common.Domain
         {
         }
 
-        public ServiceException(string code, string message, params object[] args) : base(null, code, message, args)
+        public ServiceException(string code, string message, params object[] args) : base(code, message, args)
         {
         }
 
@@ -26,7 +26,7 @@ namespace Coolector.Common.Domain
         }
 
         public ServiceException(Exception innerException, string code, string message, params object[] args)
-            : base(string.Format(message, args), innerException)
+            : base(innerException, code, string.Format(message, args), args)
         {
         }
     }
