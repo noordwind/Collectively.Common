@@ -1,11 +1,12 @@
 ﻿using System;
-using Nancy;
 
 namespace Coolector.Common.Services
 {
     public interface IExceptionHandler
     {
-        void Handle(Exception exception, NancyContext context,
+        void Handle(Exception exception, params string[] tags);
+
+        void Handle(Exception exception, object data,
             string name = "Request details", params string[] tags);
     }
 }
