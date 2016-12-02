@@ -14,7 +14,7 @@ namespace Coolector.Common.Events.Users
         {
         }
 
-        public SetNewPasswordRejected(Guid requestId, string reason, string code, string email)
+        public SetNewPasswordRejected(Guid requestId, string code, string reason, string email)
         {
             RequestId = requestId;
             Reason = reason;
