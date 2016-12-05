@@ -58,10 +58,22 @@ namespace Coolector.Common.Extensions
 
         public static PagedResult<T> ToPagedResult<T>(this IEnumerable<T> collection, HttpResponseHeaders headers)
         {
-            var totalResults = headers.GetValues("X-Total-Count").FirstOrDefault();
+            var items = collection?.ToArray() ?? Enumerable.Empty<T>().ToArray();
+            if (items.Any() == false)
+                return PagedResult<T>.Empty;
+
+            IEnumerable<string> xTotalCountHeaders;
+            IEnumerable<string> linkHeaders;
+            if (headers.TryGetValues("X-Total-Count", out xTotalCountHeaders) == false
+                || headers.TryGetValues("Link", out linkHeaders) == false)
+            {
+                return items.PaginateWithoutLimit();
+            }
+
+            var totalResults = xTotalCountHeaders.First();
             var totalResultsInt = int.Parse(totalResults);
 
-            var link = headers.GetValues("Link").First();
+            var link = linkHeaders.First();
             var totalPages = int.Parse(GetValueFromLink(link, "last", "page"));
 
             var currentPage = 0;
@@ -74,7 +86,7 @@ namespace Coolector.Common.Extensions
 
             var resultsPerPage = int.Parse(GetValueFromLink(link, "first", "results"));
 
-            return PagedResult<T>.Create(collection, currentPage, resultsPerPage, totalPages, totalResultsInt);
+            return PagedResult<T>.Create(items, currentPage, resultsPerPage, totalPages, totalResultsInt);
         }
 
         private static string GetValueFromLink(string link, string rel, string paramName)
