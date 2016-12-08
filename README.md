@@ -20,5 +20,5 @@ It's being automatically published to the [MyGet](https://www.myget.org) after t
 
 **Solution structure**
 ----------------
-- **Coolector.Common** - core project via that can be built via *dotnet build* command.
+- **Coolector.Common** - core project that can be built via *dotnet build* command.
 - **Coolector.Common.Tests** - unit & integration tests executable via *dotnet test* command.
