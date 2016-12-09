@@ -1,4 +1,4 @@
-﻿namespace Coolector.Common.Dto.General
+﻿namespace Coolector.Common.Dto
 {
     public class AvailableResourceDto
     {
