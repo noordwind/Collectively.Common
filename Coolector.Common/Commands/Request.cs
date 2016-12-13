@@ -15,6 +15,10 @@ namespace Coolector.Common.Commands
         public static Request From<T>(Request request)
             => Create<T>(request.Id, request.Origin, request.Culture, request.Resource);
 
+        public static Request New<T>() => New<T>(Guid.NewGuid());
+
+        public static Request New<T>(Guid id) => Create<T>(id, string.Empty, string.Empty);
+
         public static Request Create<T>(Guid id, string origin, string culture, string resource = "")
             => new Request
             {
