@@ -162,14 +162,38 @@ namespace Coolector.Common.Tests.Specs.Services
             .Execute();
 
         It should_call_execute_method = () => FirstTaskMock.Verify(x => x.Execute(), Times.Once);
-        It should_call_error_method = () => FirstTaskMock.Verify(x => x.Error(), Times.Once);
         It should_not_call_success_method = () => FirstTaskMock.Verify(x => x.Success(), Times.Never);
         It should_call_custom_error_method = () => FirstTaskMock.Verify(x => x.CustomError(), Times.Once);
+        It should_not_call_error_method = () => FirstTaskMock.Verify(x => x.Error(), Times.Never);
         It should_call_always_method = () => FirstTaskMock.Verify(x => x.Always(), Times.Once);
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagatedand_it_is_propagated : Handler_specs
+    public class When_one_task_is_assigned_task_throws_custom_exception_and_execute_on_error_is_enabled : Handler_specs
+    {
+        Establish context = () =>
+        {
+            Initialize();
+            FirstTaskMock.Setup(x => x.Execute()).Throws<ServiceException>();
+        };
+
+        Because of = () => Handler
+            .Run(() => FirstTaskMock.Object.Execute())
+            .OnSuccess(() => FirstTaskMock.Object.Success())
+            .OnCustomError(ex => FirstTaskMock.Object.CustomError(), executeOnError: true)
+            .OnError(ex => FirstTaskMock.Object.Error())
+            .Always(() => FirstTaskMock.Object.Always())
+            .Execute();
+
+        It should_call_execute_method = () => FirstTaskMock.Verify(x => x.Execute(), Times.Once);
+        It should_not_call_success_method = () => FirstTaskMock.Verify(x => x.Success(), Times.Never);
+        It should_call_custom_error_method = () => FirstTaskMock.Verify(x => x.CustomError(), Times.Once);
+        It should_call_error_method = () => FirstTaskMock.Verify(x => x.Error(), Times.Once);
+        It should_call_always_method = () => FirstTaskMock.Verify(x => x.Always(), Times.Once);
+    }
+
+    [Subject("Handler Execute")]
+    public class When_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagated : Handler_specs
     {
         protected static Exception Exception;
 
@@ -185,6 +209,37 @@ namespace Coolector.Common.Tests.Specs.Services
                 .Run(() => FirstTaskMock.Object.Execute())
                 .OnSuccess(() => FirstTaskMock.Object.Success())
                 .OnCustomError(ex => FirstTaskMock.Object.CustomError())
+                .OnError(ex => FirstTaskMock.Object.Error())
+                .Always(() => FirstTaskMock.Object.Always())
+                .PropagateException()
+                .Execute();
+        });
+
+        It should_call_execute_method = () => FirstTaskMock.Verify(x => x.Execute(), Times.Once);
+        It should_not_call_error_method = () => FirstTaskMock.Verify(x => x.Error(), Times.Never);
+        It should_not_call_success_method = () => FirstTaskMock.Verify(x => x.Success(), Times.Never);
+        It should_call_custom_error_method = () => FirstTaskMock.Verify(x => x.CustomError(), Times.Once);
+        It should_call_always_method = () => FirstTaskMock.Verify(x => x.Always(), Times.Once);
+        It should_throw_a_service_exception = () => Exception.ShouldBeOfExactType<ServiceException>();
+    }
+
+    [Subject("Handler Execute")]
+    public class When_one_task_is_assigned_task_throws_custom_exception_execute_on_error_is_enabled_and_it_is_propagated : Handler_specs
+    {
+        protected static Exception Exception;
+
+        Establish context = () =>
+        {
+            Initialize();
+            FirstTaskMock.Setup(x => x.Execute()).Throws<ServiceException>();
+        };
+
+        Because of = () => Exception = Catch.Exception(() =>
+        {
+            Handler
+                .Run(() => FirstTaskMock.Object.Execute())
+                .OnSuccess(() => FirstTaskMock.Object.Success())
+                .OnCustomError(ex => FirstTaskMock.Object.CustomError(), executeOnError: true)
                 .OnError(ex => FirstTaskMock.Object.Error())
                 .Always(() => FirstTaskMock.Object.Always())
                 .PropagateException()
@@ -449,6 +504,31 @@ namespace Coolector.Common.Tests.Specs.Services
             .Await();
 
         It should_call_execute_async_method = () => FirstTaskMock.Verify(x => x.ExecuteAsync(), Times.Once);
+        It should_not_call_error_async_method = () => FirstTaskMock.Verify(x => x.ErrorAsync(), Times.Never);
+        It should_not_call_success_async_method = () => FirstTaskMock.Verify(x => x.SuccessAsync(), Times.Never);
+        It should_call_custom_error_async_method = () => FirstTaskMock.Verify(x => x.CustomErrorAsync(), Times.Once);
+        It should_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
+    }
+
+    [Subject("Handler Execute")]
+    public class When_one_task_is_assigned_task_throws_custom_exception_async_and_execute_on_error_is_enabled : Handler_specs
+    {
+        Establish context = () =>
+        {
+            Initialize();
+            FirstTaskMock.Setup(x => x.ExecuteAsync()).Throws<ServiceException>();
+        };
+
+        Because of = () => Handler
+            .Run(async () => await FirstTaskMock.Object.ExecuteAsync())
+            .OnSuccess(async () => await FirstTaskMock.Object.SuccessAsync())
+            .OnCustomError(async ex => await FirstTaskMock.Object.CustomErrorAsync(), executeOnError: true)
+            .OnError(async ex => await FirstTaskMock.Object.ErrorAsync())
+            .Always(async () => await FirstTaskMock.Object.AlwaysAsync())
+            .ExecuteAsync()
+            .Await();
+
+        It should_call_execute_async_method = () => FirstTaskMock.Verify(x => x.ExecuteAsync(), Times.Once);
         It should_call_error_async_method = () => FirstTaskMock.Verify(x => x.ErrorAsync(), Times.Once);
         It should_not_call_success_async_method = () => FirstTaskMock.Verify(x => x.SuccessAsync(), Times.Never);
         It should_call_custom_error_async_method = () => FirstTaskMock.Verify(x => x.CustomErrorAsync(), Times.Once);
@@ -456,7 +536,7 @@ namespace Coolector.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagatedand_it_is_propagated_async : Handler_specs
+    public class When_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagated_async : Handler_specs
     {
         protected static Exception Exception;
 
@@ -472,6 +552,38 @@ namespace Coolector.Common.Tests.Specs.Services
                 .Run(async () => await FirstTaskMock.Object.ExecuteAsync())
                 .OnSuccess(async () => await FirstTaskMock.Object.SuccessAsync())
                 .OnCustomError(async ex => await FirstTaskMock.Object.CustomErrorAsync())
+                .OnError(async ex => await FirstTaskMock.Object.ErrorAsync())
+                .Always(async () => await FirstTaskMock.Object.AlwaysAsync())
+                .PropagateException()
+                .ExecuteAsync()
+                .Await();
+        });
+
+        It should_call_execute_async_method = () => FirstTaskMock.Verify(x => x.ExecuteAsync(), Times.Once);
+        It should_not_call_error_async_method = () => FirstTaskMock.Verify(x => x.ErrorAsync(), Times.Never);
+        It should_not_call_success_async_method = () => FirstTaskMock.Verify(x => x.SuccessAsync(), Times.Never);
+        It should_call_custom_error_async_method = () => FirstTaskMock.Verify(x => x.CustomErrorAsync(), Times.Once);
+        It should_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
+        It should_throw_a_service_exception = () => Exception.ShouldBeOfExactType<ServiceException>();
+    }
+
+    [Subject("Handler Execute")]
+    public class When_one_task_is_assigned_task_throws_custom_exception_execute_on_error_is_enabled_and_it_is_propagated_async : Handler_specs
+    {
+        protected static Exception Exception;
+
+        Establish context = () =>
+        {
+            Initialize();
+            FirstTaskMock.Setup(x => x.ExecuteAsync()).Throws<ServiceException>();
+        };
+
+        Because of = () => Exception = Catch.Exception(() =>
+        {
+            Handler
+                .Run(async () => await FirstTaskMock.Object.ExecuteAsync())
+                .OnSuccess(async () => await FirstTaskMock.Object.SuccessAsync())
+                .OnCustomError(async ex => await FirstTaskMock.Object.CustomErrorAsync(), executeOnError: true)
                 .OnError(async ex => await FirstTaskMock.Object.ErrorAsync())
                 .Always(async () => await FirstTaskMock.Object.AlwaysAsync())
                 .PropagateException()
