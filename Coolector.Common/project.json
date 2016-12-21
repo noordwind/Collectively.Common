@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "Coolector.Common",
   "authors": ["Noordwind"],
   "title": "Coolector.Common",
@@ -9,22 +9,22 @@
     "packageType": "DotnetCliTool"
   },
   "dependencies": {
-    "Autofac": "4.1.0",
+    "Autofac": "4.2.1",
     "AutoMapper": "5.2.0",
     "Exceptionless": "4.0.1922",
     "Humanizer.Core": "2.1.0",
     "Microsoft.AspNetCore.Hosting": "1.1.0",
     "Microsoft.AspNetCore.Owin": "1.1.0",
-    "Microsoft.AspNetCore.Server.Kestrel": "1.0.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
     "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
     "Microsoft.Extensions.Configuration.Json": "1.1.0",
-    "MongoDB.Driver": "2.3.0",
+    "MongoDB.Driver": "2.4.0",
     "Nancy": "2.0.0-barneyrubble",
     "Newtonsoft.Json": "9.0.1",
     "NLog.Extensions.Logging": "1.0.0-*",
-    "RawRabbit": "1.10.0",
-    "RawRabbit.vNext": "1.10.0"
+    "RawRabbit": "1.10.3",
+    "RawRabbit.vNext": "1.10.3"
   },
   "frameworks": {
     "netstandard1.6": {}
