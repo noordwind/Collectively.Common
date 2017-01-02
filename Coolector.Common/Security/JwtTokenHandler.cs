@@ -4,7 +4,7 @@ using Jose;
 using NLog;
 using Coolector.Common.Extensions;
 
-namespace Coolector.Common.Security.Authentication
+namespace Coolector.Common.Security
 {
     public class JwtTokenHandler : IJwtTokenHandler
     {

@@ -1,4 +1,4 @@
-﻿namespace Coolector.Common.Security.Authentication
+﻿namespace Coolector.Common.Security
 {
     public interface IJwtTokenHandler
     {
