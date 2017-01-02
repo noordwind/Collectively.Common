@@ -23,7 +23,7 @@
     "Nancy": "2.0.0-barneyrubble",
     "Newtonsoft.Json": "9.0.1",
     "NLog.Extensions.Logging": "1.0.0-*",
-    "Polly": "5.0.2-v5-0-alpha0001",
+    "Polly": "5.0.1-v5-0-alpha0001",
     "RawRabbit": "1.10.3",
     "RawRabbit.vNext": "1.10.3"
   },
