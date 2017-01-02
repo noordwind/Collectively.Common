@@ -18,16 +18,20 @@ namespace Coolector.Common.Security
             _serviceSecuritySettings = serviceSecuritySettings;
         }
         
-        public Maybe<string> CreateToken(string username, string password)
+        public Maybe<string> CreateToken(Credentials credentials)
         {
-            if (username.Empty() || password.Empty())
+            if (credentials == null)
             {
                 return null;
             }
-            if (username.Equals(_serviceSecuritySettings.Username) && 
-                password.Equals(_serviceSecuritySettings.Password))
+            if (credentials.Username.Empty() || credentials.Password.Empty())
             {
-                return _jwtTokenHandler.Create(username);
+                return null;
+            }
+            if (credentials.Username.Equals(_serviceSecuritySettings.Username) && 
+                credentials.Password.Equals(_serviceSecuritySettings.Password))
+            {
+                return _jwtTokenHandler.Create(credentials.Username);
             }
 
             return null;
