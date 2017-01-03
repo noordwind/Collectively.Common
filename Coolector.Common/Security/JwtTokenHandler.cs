@@ -24,7 +24,7 @@ namespace Coolector.Common.Security
             var customPayload = new JwtToken
             {
                 Sub = userId,
-                Exp = expiryTicks
+                Exp = DateTime.UtcNow.AddTicks(expiryTicks).Ticks
             };
 
             return JWT.Encode(customPayload, _jwtSecretKey, JwsAlgorithm.HS512);
