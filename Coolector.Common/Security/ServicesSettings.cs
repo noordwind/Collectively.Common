@@ -2,8 +2,7 @@ using System.Collections.Generic;
 
 namespace Coolector.Common.Security
 {
-    public class ServicesSettings
+    public class ServicesSettings : List<ServiceSettings>
     {
-        public IList<ServiceSettings> Services { get; set; }
     }
 }
