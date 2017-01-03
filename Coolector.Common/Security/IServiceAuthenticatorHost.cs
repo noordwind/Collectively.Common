@@ -2,7 +2,7 @@ using Coolector.Common.Types;
 
 namespace Coolector.Common.Security
 {
-    public interface IServiceAuthentication
+    public interface IServiceAuthenticatorHost
     {
          Maybe<string> CreateToken(Credentials credentials);
     }

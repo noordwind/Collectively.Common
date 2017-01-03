@@ -18,12 +18,13 @@ namespace Coolector.Common.Security
             _jwtSecretKey = Encoding.Unicode.GetBytes(settings.SecretKey);
         }
 
-        public string Create(string userId)
+        public string Create(string userId, TimeSpan? expiry = null)
         {
+            var expiryTicks = expiry?.Ticks ?? DateTime.MinValue.AddDays(_settings.ExpiryDays).Ticks;
             var customPayload = new JwtToken
             {
                 Sub = userId,
-                Exp = DateTime.UtcNow.AddDays(_settings.ExpiryDays).Ticks
+                Exp = expiryTicks
             };
 
             return JWT.Encode(customPayload, _jwtSecretKey, JwsAlgorithm.HS512);

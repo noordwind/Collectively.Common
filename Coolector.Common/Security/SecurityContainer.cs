@@ -11,21 +11,22 @@ namespace Coolector.Common.Security
             builder.RegisterType<JwtTokenHandler>()
                 .As<IJwtTokenHandler>()
                 .SingleInstance();
+
+            builder.RegisterType<ServiceAuthenticatorClient>()
+                .As<IServiceAuthenticatorClient>()
+                .SingleInstance();
             
-            builder.RegisterType<ServiceAuthentication>()
-                .As<IServiceAuthentication>()
+            builder.RegisterType<ServiceAuthenticatorHost>()
+                .As<IServiceAuthenticatorHost>()
                 .SingleInstance();
 
             builder.RegisterInstance(configuration.GetSettings<JwtTokenSettings>())
                 .SingleInstance();
 
-            builder.RegisterInstance(configuration.GetSettings<SecuredServiceSettings>())
+            builder.RegisterInstance(configuration.GetSettings<ServiceSettings>())
                 .SingleInstance();
 
-            builder.RegisterInstance(configuration.GetSettings<SecuredServicesSettings>())
-                .SingleInstance();
-
-            builder.RegisterInstance(configuration.GetSettings<ServiceSecuritySettings>())
+            builder.RegisterInstance(configuration.GetSettings<ServicesSettings>())
                 .SingleInstance();
         }
     }

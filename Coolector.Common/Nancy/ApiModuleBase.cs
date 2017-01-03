@@ -7,7 +7,6 @@ using Coolector.Common.Types;
 using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
-using NLog;
 
 namespace Coolector.Common.Nancy
 {

@@ -1,21 +1,23 @@
+using System;
 using Coolector.Common.Extensions;
 using Coolector.Common.Types;
 
 namespace Coolector.Common.Security
 {
-    public class ServiceAuthentication : IServiceAuthentication
+    public class ServiceAuthenticatorHost : IServiceAuthenticatorHost
     {
+        private readonly static TimeSpan Expiry = TimeSpan.FromTicks(DateTime.MinValue.AddYears(100).Ticks);
         private readonly IJwtTokenHandler _jwtTokenHandler;
         private readonly JwtTokenSettings _jwtTokenSettings;
-        private readonly ServiceSecuritySettings _serviceSecuritySettings;
+        private readonly ServiceSettings _serviceSettings;
 
-        public ServiceAuthentication(IJwtTokenHandler jwtTokenHandler,
+        public ServiceAuthenticatorHost(IJwtTokenHandler jwtTokenHandler,
             JwtTokenSettings jwtTokenSettings, 
-            ServiceSecuritySettings serviceSecuritySettings)
+            ServiceSettings serviceSettings)
         {
             _jwtTokenHandler = jwtTokenHandler;
             _jwtTokenSettings = jwtTokenSettings;
-            _serviceSecuritySettings = serviceSecuritySettings;
+            _serviceSettings = serviceSettings;
         }
         
         public Maybe<string> CreateToken(Credentials credentials)
@@ -28,10 +30,10 @@ namespace Coolector.Common.Security
             {
                 return null;
             }
-            if (credentials.Username.Equals(_serviceSecuritySettings.Username) && 
-                credentials.Password.Equals(_serviceSecuritySettings.Password))
+            if (credentials.Username.Equals(_serviceSettings.Username) && 
+                credentials.Password.Equals(_serviceSettings.Password))
             {
-                return _jwtTokenHandler.Create(credentials.Username);
+                return _jwtTokenHandler.Create(credentials.Username, Expiry);
             }
 
             return null;
