@@ -375,6 +375,32 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_throw_an_exception = () => Exception.ShouldBeOfExactType<Exception>();
     }
 
+    [Subject("Handler ExecuteAll")]
+    public class When_two_tasks_are_assigned_and_there_are_two_different_execute_all_calls : Handler_specs
+    {
+        Establish context = () => Initialize();
+
+        Because of = () =>
+        {
+            Handler
+                .Run(() => FirstTaskMock.Object.Execute())
+                .Next()
+                .Run(() => FirstTaskMock.Object.Execute())
+                .Next()
+                .ExecuteAll();
+
+            Handler
+                .Run(() => SecondTaskMock.Object.Execute())
+                .Next()
+                .Run(() => SecondTaskMock.Object.Execute())
+                .Next()
+                .ExecuteAll();
+        };
+
+        It should_call_execute_method_on_first_task = () => FirstTaskMock.Verify(x => x.Execute(), Times.Exactly(2));
+        It should_call_execute_method_on_second_task = () => SecondTaskMock.Verify(x => x.Execute(), Times.Exactly(2));
+    }
+
     [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_async : Handler_specs
     {
@@ -388,7 +414,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_execute_async_method = () => FirstTaskMock.Verify(x => x.ExecuteAsync(), Times.Once);
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_and_on_success_is_defined_async : Handler_specs
     {
         Establish context = () => Initialize();
@@ -409,7 +435,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_but_not_executed_async : Handler_specs
     {
         Establish context = () => Initialize();
@@ -428,7 +454,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_not_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Never);
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_and_task_throws_exception_async : Handler_specs
     {
         Establish context = () =>
@@ -453,7 +479,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_task_throws_exception_and_it_is_propagated_async : Handler_specs
     {
         protected static Exception Exception;
@@ -485,7 +511,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_throw_an_exception = () => Exception.ShouldBeOfExactType<Exception>();
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_and_task_throws_custom_exception_async : Handler_specs
     {
         Establish context = () =>
@@ -510,7 +536,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_task_throws_custom_exception_async_and_execute_on_error_is_enabled : Handler_specs
     {
         Establish context = () =>
@@ -535,7 +561,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagated_async : Handler_specs
     {
         protected static Exception Exception;
@@ -567,7 +593,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_throw_a_service_exception = () => Exception.ShouldBeOfExactType<ServiceException>();
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_task_throws_custom_exception_execute_on_error_is_enabled_and_it_is_propagated_async : Handler_specs
     {
         protected static Exception Exception;
@@ -599,7 +625,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_throw_a_service_exception = () => Exception.ShouldBeOfExactType<ServiceException>();
     }
 
-    [Subject("Handler Execute")]
+    [Subject("Handler ExecuteAsync")]
     public class When_one_task_is_assigned_and_task_throws_custom_exception_but_custom_error_handler_is_not_defined_async : Handler_specs
     {
         Establish context = () =>
@@ -623,7 +649,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_always_async_method = () => FirstTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
     }
 
-    [Subject("Handler ExecuteAll")]
+    [Subject("Handler ExecuteAllAsync")]
     public class When_two_tasks_are_assigned_async : Handler_specs
     {
         Establish context = () => Initialize();
@@ -640,7 +666,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_execute_method_async_on_second_task = () => SecondTaskMock.Verify(x => x.ExecuteAsync(), Times.Once);
     }
 
-    [Subject("Handler ExecuteAll")]
+    [Subject("Handler ExecuteAllAsync")]
     public class When_two_tasks_are_assigned_and_first_throws_exception_async : Handler_specs
     {
         Establish context = () =>
@@ -678,7 +704,7 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_call_always_async_method_on_second_task = () => SecondTaskMock.Verify(x => x.AlwaysAsync(), Times.Once);
     }
 
-    [Subject("Handler ExecuteAll")]
+    [Subject("Handler ExecuteAllAsync")]
     public class When_two_tasks_are_assigned_first_throws_exception_and_propagates_it_async : Handler_specs
     {
         protected static Exception Exception;
@@ -722,5 +748,31 @@ namespace Coolector.Common.Tests.Specs.Services
         It should_not_call_always_async_method_on_second_task = () => SecondTaskMock.Verify(x => x.AlwaysAsync(), Times.Never);
 
         It should_throw_an_exception = () => Exception.ShouldBeOfExactType<Exception>();
+    }
+
+    [Subject("Handler ExecuteAllAsync")]
+    public class When_two_tasks_are_assigned_and_there_are_two_different_execute_all_calls_async : Handler_specs
+    {
+        Establish context = () => Initialize();
+
+        Because of = () =>
+        {
+            Handler
+                .Run(() => FirstTaskMock.Object.ExecuteAsync())
+                .Next()
+                .Run(() => FirstTaskMock.Object.ExecuteAsync())
+                .Next()
+                .ExecuteAllAsync();
+
+            Handler
+                .Run(() => SecondTaskMock.Object.ExecuteAsync())
+                .Next()
+                .Run(() => SecondTaskMock.Object.ExecuteAsync())
+                .Next()
+                .ExecuteAllAsync();
+        };
+
+        It should_call_execute_method_on_first_task = () => FirstTaskMock.Verify(x => x.ExecuteAsync(), Times.Exactly(2));
+        It should_call_execute_method_on_second_task = () => SecondTaskMock.Verify(x => x.ExecuteAsync(), Times.Exactly(2));
     }
 }
