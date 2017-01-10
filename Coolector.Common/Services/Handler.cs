@@ -30,6 +30,7 @@ namespace Coolector.Common.Services
             {
                 handlerTask.Execute();
             }
+            _handlerTasks.Clear();
         }
 
         public async Task ExecuteAllAsync()
@@ -38,6 +39,7 @@ namespace Coolector.Common.Services
             {
                 await handlerTask.ExecuteAsync();
             }
+            _handlerTasks.Clear();
         }
     }
 }
