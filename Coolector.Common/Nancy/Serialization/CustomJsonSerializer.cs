@@ -5,7 +5,7 @@ namespace Coolector.Common.Nancy.Serialization
 {
     public sealed class CustomJsonSerializer : JsonSerializer
     {
-        private const string DateTimeFormat = "yyyy-MM-dd H:mm:ss";
+        private const string DateTimeFormat = "yyyy-MM-ddTHH:mm:ss.fffZ";
 
         public CustomJsonSerializer()
         {
