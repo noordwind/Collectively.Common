@@ -8,6 +8,7 @@ namespace Coolector.Common.Services
     public class HandlerTask : IHandlerTask
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IExceptionHandler _exceptionHandler;
         private readonly IHandler _handler;
         private readonly Action _run;
         private readonly Func<Task> _runAsync;
@@ -36,6 +37,20 @@ namespace Coolector.Common.Services
         {
             _handler = handler;
             _runAsync = runAsync;
+        }
+
+        public HandlerTask(IHandler handler, Action run, IExceptionHandler exceptionHandler = null)
+        {
+            _handler = handler;
+            _run = run;
+            _exceptionHandler = exceptionHandler;
+        }
+
+        public HandlerTask(IHandler handler, Func<Task> runAsync, IExceptionHandler exceptionHandler = null)
+        {
+            _handler = handler;
+            _runAsync = runAsync;
+            _exceptionHandler = exceptionHandler;
         }
 
         public IHandlerTask Always(Action always)
@@ -175,6 +190,7 @@ namespace Coolector.Common.Services
                 {
                     _onErrorWithLogger?.Invoke(customException, Logger);
                     _onError?.Invoke(exception);
+                    _exceptionHandler?.Handle(exception);
                 }
                 if(_propagateException)
                 {
@@ -227,6 +243,7 @@ namespace Coolector.Common.Services
                     {
                         await _onErrorAsync(exception);
                     }
+                    _exceptionHandler?.Handle(exception);
                 }
                 if(_propagateException)
                 {

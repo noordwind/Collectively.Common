@@ -25,16 +25,17 @@ namespace Coolector.Common.Tests.Specs.Services
         }
 
         protected static IHandler Handler;
-
+        protected static Mock<IExceptionHandler> ExceptionHandlerMock;
         protected static Mock<IHandlerTestTask> FirstTaskMock;
         protected static Mock<IHandlerTestTask> SecondTaskMock;
 
         protected static void Initialize()
         {
-            Handler = new Handler();
-
+            ExceptionHandlerMock = new Mock<IExceptionHandler>();
             FirstTaskMock = new Mock<IHandlerTestTask>();
             SecondTaskMock = new Mock<IHandlerTestTask>();
+
+            Handler = new Handler(ExceptionHandlerMock.Object);
         }
     }
 

@@ -6,11 +6,17 @@ namespace Coolector.Common.Services
 {
     public class Handler : IHandler
     {
+        private readonly IExceptionHandler _exceptionHandler;
         private readonly ISet<IHandlerTask> _handlerTasks = new HashSet<IHandlerTask>();
+
+        public Handler(IExceptionHandler exceptionHandler)
+        {
+            _exceptionHandler = exceptionHandler;
+        }
 
         public IHandlerTask Run(Action action)
         {
-            var handlerTask = new HandlerTask(this, action);
+            var handlerTask = new HandlerTask(this, action, _exceptionHandler);
             _handlerTasks.Add(handlerTask);
 
             return handlerTask;
@@ -18,7 +24,7 @@ namespace Coolector.Common.Services
 
         public IHandlerTask Run(Func<Task> actionAsync)
         {
-            var handlerTask = new HandlerTask(this, actionAsync);
+            var handlerTask = new HandlerTask(this, actionAsync, _exceptionHandler);
             _handlerTasks.Add(handlerTask);
 
             return handlerTask;

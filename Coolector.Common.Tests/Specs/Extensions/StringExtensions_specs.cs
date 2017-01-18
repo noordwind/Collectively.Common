@@ -87,7 +87,7 @@ namespace Coolector.Common.Tests.Specs.Extensions
 
         It should_return_correct_query_string = () =>
         {
-            Result.ShouldEqual("http://localhost?param1=test&param2=5.5&param3=test1,test2");
+            Result.ShouldEqual($"http://localhost?param1=test&param2={5.5}&param3=test1,test2");
         };
     }
 }
