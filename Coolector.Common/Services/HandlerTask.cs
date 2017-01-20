@@ -190,8 +190,9 @@ namespace Coolector.Common.Services
                 {
                     _onErrorWithLogger?.Invoke(customException, Logger);
                     _onError?.Invoke(exception);
-                    _exceptionHandler?.Handle(exception);
                 }
+                _exceptionHandler?.Handle(exception);
+                
                 if(_propagateException)
                 {
                     throw;
@@ -243,8 +244,9 @@ namespace Coolector.Common.Services
                     {
                         await _onErrorAsync(exception);
                     }
-                    _exceptionHandler?.Handle(exception);
                 }
+                _exceptionHandler?.Handle(exception);
+                
                 if(_propagateException)
                 {
                     throw;
