@@ -12,6 +12,8 @@ namespace Coolector.Common.Services
         private readonly IHandler _handler;
         private readonly Action _run;
         private readonly Func<Task> _runAsync;
+        private Action _validate;
+        private Func<Task> _validateAsync;
         private Action _always;
         private Func<Task> _alwaysAsync;
         private Action _onSuccess;
@@ -39,17 +41,25 @@ namespace Coolector.Common.Services
             _runAsync = runAsync;
         }
 
-        public HandlerTask(IHandler handler, Action run, IExceptionHandler exceptionHandler = null)
+        public HandlerTask(IHandler handler, Action run, 
+            Action validate = null, Func<Task> validateAsync = null, 
+            IExceptionHandler exceptionHandler = null)
         {
             _handler = handler;
             _run = run;
+            _validate = validate;
+            _validateAsync = validateAsync;
             _exceptionHandler = exceptionHandler;
         }
 
-        public HandlerTask(IHandler handler, Func<Task> runAsync, IExceptionHandler exceptionHandler = null)
+        public HandlerTask(IHandler handler, Func<Task> runAsync, 
+            Action validate = null, Func<Task> validateAsync = null,
+            IExceptionHandler exceptionHandler = null)
         {
             _handler = handler;
             _runAsync = runAsync;
+            _validate = validate;
+            _validateAsync = validateAsync;
             _exceptionHandler = exceptionHandler;
         }
 
@@ -173,6 +183,7 @@ namespace Coolector.Common.Services
         {
             try
             {
+                _validate?.Invoke();
                 _run();
                 _onSuccess?.Invoke();
             }
@@ -208,6 +219,11 @@ namespace Coolector.Common.Services
         {
             try
             {
+                _validate?.Invoke();
+                if(_validateAsync != null)
+                {
+                    await _validateAsync();
+                }
                 await _runAsync();
                 if(_onSuccessAsync != null)
                 {
