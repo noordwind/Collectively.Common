@@ -2,6 +2,11 @@
 
 ####**Keep your commune clean in just a few clicks.**
 
+|Branch             |Build status                                                  
+|-------------------|-----------------------------------------------------
+|master             |[![master branch build status](https://api.travis-ci.org/noordwind/Coolector.Common.svg?branch=master)](https://travis-ci.org/noordwind/Coolector.Common)
+|develop            |[![develop branch build status](https://api.travis-ci.org/noordwind/Coolector.Common.svg?branch=develop)](https://travis-ci.org/noordwind/Coolector.Common/branches)
+
 **What is Coolector?**
 ----------------
 
