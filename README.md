@@ -20,7 +20,7 @@ Within a few clicks you can greatly improve the overall tidiness of the place wh
 **Coolector.Common**
 ----------------
 
-The **Coolector.Common** is a shared library referenced by the other Coolector services. It does provide some common interfaces, extensions, models and utilities.
+The **Coolector.Common** is a shared library being referenced by the other Coolector services. It does provide some common interfaces, extensions, models and utilities.
 It's being automatically published to the [MyGet](https://www.myget.org) after the new push to the repository.
 
 **Solution structure**
