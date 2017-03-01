@@ -2,7 +2,7 @@
 
 namespace Collectively.Common.Domain
 {
-    public class ServiceException : CoolectorException
+    public class ServiceException : CollectivelyException
     {
         public ServiceException()
         {

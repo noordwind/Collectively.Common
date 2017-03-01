@@ -30,7 +30,7 @@ namespace Collectively.Common.Mongo
 
         private void RegisterConventions()
         {
-            ConventionRegistry.Register("CoolectorConventions", new MongoConvention(), x => true);
+            ConventionRegistry.Register("CollectivelyConventions", new MongoConvention(), x => true);
             _initialized = true;
         }
 

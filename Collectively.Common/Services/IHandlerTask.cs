@@ -9,13 +9,13 @@ namespace Collectively.Common.Services
     {
         IHandlerTask Always(Action always);
         IHandlerTask Always(Func<Task> always);
-        IHandlerTask OnCustomError(Action<CoolectorException> onCustomError, 
+        IHandlerTask OnCustomError(Action<CollectivelyException> onCustomError, 
             bool propagateException = false, bool executeOnError = false);
-        IHandlerTask OnCustomError(Action<CoolectorException, Logger> onCustomError,
+        IHandlerTask OnCustomError(Action<CollectivelyException, Logger> onCustomError,
             bool propagateException = false, bool executeOnError = false);
-        IHandlerTask OnCustomError(Func<CoolectorException, Task> onCustomError,
+        IHandlerTask OnCustomError(Func<CollectivelyException, Task> onCustomError,
             bool propagateException = false, bool executeOnError = false);
-        IHandlerTask OnCustomError(Func<CoolectorException, Logger, Task> onCustomError,
+        IHandlerTask OnCustomError(Func<CollectivelyException, Logger, Task> onCustomError,
             bool propagateException = false, bool executeOnError = false);
         IHandlerTask OnError(Action<Exception> onError, bool propagateException = false);
         IHandlerTask OnError(Action<Exception, Logger> onError, bool propagateException = false);

@@ -26,7 +26,7 @@ namespace Collectively.Common.Nancy
                     var token = jwtTokenHandler.GetFromAuthorizationHeader(ctx.Request.Headers.Authorization);
                     var isValid = jwtTokenHandler.IsValid(token);
 
-                    return isValid ? new CoolectorIdentity(token.Sub) : null;
+                    return isValid ? new CollectivelyIdentity(token.Sub) : null;
                 });
             StatelessAuthentication.Enable(pipelines, statelessAuthConfiguration);            
         }

@@ -28,7 +28,7 @@ namespace Collectively.Common.Host
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                name = $"Coolector Service: {typeof(TStartup).Namespace.Split('.').Last()}";
+                name = $"Collectively Service: {typeof(TStartup).Namespace.Split('.').Last()}";
             }            
 
             Console.Title = name;

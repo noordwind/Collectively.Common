@@ -3,9 +3,9 @@ using System.Security.Principal;
 
 namespace Collectively.Common.Security
 {
-    public class CoolectorIdentity : ClaimsPrincipal
+    public class CollectivelyIdentity : ClaimsPrincipal
     {
-        public CoolectorIdentity(string name) : base(new GenericIdentity(name))
+        public CollectivelyIdentity(string name) : base(new GenericIdentity(name))
         {
         }
     }
