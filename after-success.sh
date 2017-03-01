@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 case "$TRAVIS_BRANCH" in
   "master")
     echo Triggering MyGet package build using branch $TRAVIS_BRANCH

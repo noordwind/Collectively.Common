@@ -1,0 +1,36 @@
+{
+  "name": "Collectively.Common",
+  "authors": ["Noordwind"],
+  "title": "Collectively.Common",
+  "version": "1.0.0-*",
+  "packOptions": {
+    "licenseUrl": "https://github.com/noordwind/Collectively.Common/blob/master/LICENSE",
+    "projectUrl": "https://github.com/noordwind/Collectively.Common",
+    "packageType": "DotnetCliTool"
+  },
+  "dependencies": {
+    "Collectively.Messages": "1.0.*",
+    "Autofac": "4.2.1",
+    "AutoMapper": "5.2.0",
+    "Exceptionless": "4.0.1922",
+    "Humanizer.Core": "2.1.0",
+    "jose-jwt": "2.1.0",
+    "Microsoft.AspNetCore.Hosting": "1.1.0",
+    "Microsoft.AspNetCore.Owin": "1.1.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
+    "Microsoft.Extensions.Configuration.Json": "1.1.0",
+    "MongoDB.Driver": "2.4.0",
+    "Nancy": "2.0.0-barneyrubble",
+    "Nancy.Authentication.Stateless": "2.0.0-barneyrubble",
+    "Newtonsoft.Json": "9.0.1",
+    "NLog.Extensions.Logging": "1.0.0-*",
+    "Polly": "5.0.1-v5-0-alpha0001",
+    "RawRabbit": "1.10.3",
+    "RawRabbit.vNext": "1.10.3"
+  },
+  "frameworks": {
+    "netstandard1.6": {}
+  }
+}

@@ -1,11 +1,11 @@
-# Coolector.Common
+# Collectively.Common
 
 ####**Keep your commune clean in just a few clicks.**
 
 |Branch             |Build status                                                  
 |-------------------|-----------------------------------------------------
-|master             |[![master branch build status](https://api.travis-ci.org/noordwind/Coolector.Common.svg?branch=master)](https://travis-ci.org/noordwind/Coolector.Common)
-|develop            |[![develop branch build status](https://api.travis-ci.org/noordwind/Coolector.Common.svg?branch=develop)](https://travis-ci.org/noordwind/Coolector.Common/branches)
+|master             |[![master branch build status](https://api.travis-ci.org/noordwind/Collectively.Common.svg?branch=master)](https://travis-ci.org/noordwind/Collectively.Common)
+|develop            |[![develop branch build status](https://api.travis-ci.org/noordwind/Collectively.Common.svg?branch=develop)](https://travis-ci.org/noordwind/Collectively.Common/branches)
 
 **What is Coolector?**
 ----------------
@@ -17,13 +17,13 @@ Within a few clicks you can greatly improve the overall tidiness of the place wh
 
 **Coolector** may help you not only to quickly submit a new remark about the pollution or broken stuff, but also to browse the already sent remarks and help to clean them up if you feel up to the task of keeping your neighborhood a clean place.
 
-**Coolector.Common**
+**Collectively.Common**
 ----------------
 
-The **Coolector.Common** is a shared library being referenced by the other Coolector services. It does provide some common interfaces, extensions, models and utilities.
+The **Collectively.Common** is a shared library being referenced by the other Coolector services. It does provide some common interfaces, extensions, models and utilities.
 It's being automatically published to the [MyGet](https://www.myget.org) after the new push to the repository.
 
 **Solution structure**
 ----------------
-- **Coolector.Common** - core project that can be built via *dotnet build* command.
-- **Coolector.Common.Tests** - unit & integration tests executable via *dotnet test* command.
+- **Collectively.Common** - core project that can be built via *dotnet build* command.
+- **Collectively.Common.Tests** - unit & integration tests executable via *dotnet test* command.
