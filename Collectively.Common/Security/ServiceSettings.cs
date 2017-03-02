@@ -4,6 +4,7 @@ namespace Collectively.Common.Security
 {
     public class ServiceSettings
     {
+        public string Title { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
         public string Username { get; set; }
