@@ -43,7 +43,7 @@ namespace Collectively.Common.ServiceClients
 
         public async Task<Maybe<Stream>> GetStreamAsync(string name, string endpoint)
         {
-            var response = await _httpClient.GetAsync(name, endpoint);
+            var response = await _httpClient.GetAsync(GetUrl(name), endpoint);
             if (response.HasNoValue)
                 return new Maybe<Stream>();
 
