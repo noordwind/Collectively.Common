@@ -27,3 +27,4 @@ It's being automatically published to the [MyGet](https://www.myget.org) after t
 ----------------
 - **Collectively.Common** - core project that can be built via *dotnet build* command.
 - **Collectively.Common.Tests** - unit & integration tests executable via *dotnet test* command.
+
