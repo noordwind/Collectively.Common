@@ -18,25 +18,45 @@ namespace Collectively.Common.ServiceClients
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(x => x.Resolve<ServicesSettings>()
-                    .FirstOrDefault(s => s.Title == "operations"))
-                .Named<ServiceSettings>(OperationsSettingsKey)
-                .SingleInstance();
+            builder.Register(x => 
+            {
+                var settings = x.Resolve<ServicesSettings>()
+                                .FirstOrDefault(s => s.Title == "services-operations");
 
-            builder.Register(x => x.Resolve<ServicesSettings>()
-                    .FirstOrDefault(s => s.Title == "remarks"))
-                .Named<ServiceSettings>(RemarksSettingsKey)
-                .SingleInstance();
+                return settings ?? new ServiceSettings();
+            })
+            .Named<ServiceSettings>(OperationsSettingsKey)
+            .SingleInstance();
 
-            builder.Register(x => x.Resolve<ServicesSettings>()
-                    .FirstOrDefault(s => s.Title == "statistics"))
-                .Named<ServiceSettings>(StatisticsSettingsKey)
-                .SingleInstance();
+            builder.Register(x => 
+            {
+                var settings = x.Resolve<ServicesSettings>()
+                                .FirstOrDefault(s => s.Title == "services-remarks");
 
-            builder.Register(x => x.Resolve<ServicesSettings>()
-                    .FirstOrDefault(s => s.Title == "users"))
-                .Named<ServiceSettings>(UsersSettingsKey)
-                .SingleInstance();
+                return settings ?? new ServiceSettings();
+            })
+            .Named<ServiceSettings>(RemarksSettingsKey)
+            .SingleInstance();
+
+            builder.Register(x => 
+            {
+                var settings = x.Resolve<ServicesSettings>()
+                                .FirstOrDefault(s => s.Title == "services-statistics");
+
+                return settings ?? new ServiceSettings();
+            })
+            .Named<ServiceSettings>(StatisticsSettingsKey)
+            .SingleInstance();
+
+            builder.Register(x => 
+            {
+                var settings = x.Resolve<ServicesSettings>()
+                                .FirstOrDefault(s => s.Title == "services-users");
+
+                return settings ?? new ServiceSettings();
+            })
+            .Named<ServiceSettings>(UsersSettingsKey)
+            .SingleInstance();
 
             builder.RegisterType<CustomHttpClient>()
                 .As<IHttpClient>();
