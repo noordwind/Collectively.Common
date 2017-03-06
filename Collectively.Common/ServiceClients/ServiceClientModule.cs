@@ -38,6 +38,9 @@ namespace Collectively.Common.ServiceClients
                 .Named<ServiceSettings>(UsersSettingsKey)
                 .SingleInstance();
 
+            builder.RegisterType<CustomHttpClient>()
+                .As<IHttpClient>();
+
             builder.RegisterType<ServiceClient>()
                 .As<IServiceClient>();
 
