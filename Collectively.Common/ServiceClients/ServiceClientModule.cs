@@ -21,7 +21,7 @@ namespace Collectively.Common.ServiceClients
             builder.Register(x => 
             {
                 var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "services-operations");
+                                .FirstOrDefault(s => s.Title == "operations-service");
 
                 return settings ?? new ServiceSettings();
             })
@@ -31,7 +31,7 @@ namespace Collectively.Common.ServiceClients
             builder.Register(x => 
             {
                 var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "services-remarks");
+                                .FirstOrDefault(s => s.Title == "remarks-service");
 
                 return settings ?? new ServiceSettings();
             })
@@ -41,7 +41,7 @@ namespace Collectively.Common.ServiceClients
             builder.Register(x => 
             {
                 var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "services-statistics");
+                                .FirstOrDefault(s => s.Title == "statistics-service");
 
                 return settings ?? new ServiceSettings();
             })
@@ -51,7 +51,7 @@ namespace Collectively.Common.ServiceClients
             builder.Register(x => 
             {
                 var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "services-users");
+                                .FirstOrDefault(s => s.Title == "users-service");
 
                 return settings ?? new ServiceSettings();
             })
