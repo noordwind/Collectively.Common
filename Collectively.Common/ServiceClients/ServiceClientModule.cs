@@ -8,11 +8,11 @@ namespace Collectively.Common.ServiceClients
         {
             builder.RegisterType<CustomHttpClient>()
                 .As<IHttpClient>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
 
             builder.RegisterType<ServiceClient>()
                 .As<IServiceClient>()
-                .InstancePerLifetimeScope();
+                .SingleInstance();
         }
     }
 }
