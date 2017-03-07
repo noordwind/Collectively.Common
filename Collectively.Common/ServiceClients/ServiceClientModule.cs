@@ -6,6 +6,9 @@ namespace Collectively.Common.ServiceClients
 {
     public class ServiceClientModule : Module
     {
+        private static readonly string[] Services = new []{"mailing", "medium", "operations", 
+            "remarks", "statistics", "storage", "supervisor", "users"};
+
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<CustomHttpClient>()
@@ -16,10 +19,10 @@ namespace Collectively.Common.ServiceClients
                 .As<IServiceClient>()
                 .InstancePerLifetimeScope();
 
-            RegisterSettings(builder, "operations");
-            RegisterSettings(builder, "remarks");
-            RegisterSettings(builder, "users");
-            RegisterSettings(builder, "statistics");
+            foreach(var service in Services)
+            {
+                RegisterSettings(builder, service);
+            }
         }
 
         private void RegisterSettings(ContainerBuilder builder, string title)
