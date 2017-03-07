@@ -26,7 +26,7 @@ namespace Collectively.Common.ServiceClients
             _httpClient = httpClient;
             _serviceAuthenticatorClient = serviceAuthenticatorClient;
             _servicesSettings = servicesSettings;
-            foreach(var service in _servicesSettings)
+            foreach(var service in _servicesSettings.Where(x => x.Name.NotEmpty()))
             {
                 _authenticatedServices[service.Name] = string.Empty;
             }
@@ -127,6 +127,7 @@ namespace Collectively.Common.ServiceClients
                     return null;
                 }
                 token = authenticationToken.Value;
+                _authenticatedServices[name] = token;
             }
 
             _httpClient.SetAuthorizationHeader(token);
