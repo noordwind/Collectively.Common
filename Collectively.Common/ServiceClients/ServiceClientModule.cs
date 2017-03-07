@@ -1,7 +1,7 @@
+using System;
 using System.Linq;
 using Autofac;
 using Collectively.Common.Security;
-using Collectively.Common.ServiceClients;
 using Collectively.Common.ServiceClients.Operations;
 using Collectively.Common.ServiceClients.Remarks;
 using Collectively.Common.ServiceClients.Statistics;
@@ -11,77 +11,37 @@ namespace Collectively.Common.ServiceClients
 {
     public class ServiceClientModule : Module
     {
-        private readonly static string OperationsSettingsKey = "operations-settings";
-        private readonly static string RemarksSettingsKey = "remarks-settings";
-        private readonly static string StatisticsSettingsKey = "statistics-settings";
-        private readonly static string UsersSettingsKey = "users-settings";
-
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(x => 
-            {
-                var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "operations-service");
-
-                return settings ?? new ServiceSettings();
-            })
-            .Named<ServiceSettings>(OperationsSettingsKey)
-            .SingleInstance();
-
-            builder.Register(x => 
-            {
-                var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "remarks-service");
-
-                return settings ?? new ServiceSettings();
-            })
-            .Named<ServiceSettings>(RemarksSettingsKey)
-            .SingleInstance();
-
-            builder.Register(x => 
-            {
-                var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "statistics-service");
-
-                return settings ?? new ServiceSettings();
-            })
-            .Named<ServiceSettings>(StatisticsSettingsKey)
-            .SingleInstance();
-
-            builder.Register(x => 
-            {
-                var settings = x.Resolve<ServicesSettings>()
-                                .FirstOrDefault(s => s.Title == "users-service");
-
-                return settings ?? new ServiceSettings();
-            })
-            .Named<ServiceSettings>(UsersSettingsKey)
-            .SingleInstance();
-
             builder.RegisterType<CustomHttpClient>()
                 .As<IHttpClient>();
 
             builder.RegisterType<ServiceClient>()
                 .As<IServiceClient>();
 
-            builder.Register(x => new OperationServiceClient(x.Resolve<IServiceClient>(), 
-                x.ResolveNamed<ServiceSettings>(OperationsSettingsKey)))
-                .As<IOperationServiceClient>()
-                .SingleInstance();
+            RegisterService<OperationServiceClient, IOperationServiceClient>(builder, "operations");
+            RegisterService<RemarkServiceClient, IRemarkServiceClient>(builder, "remarks");
+            RegisterService<UserServiceClient, IUserServiceClient>(builder, "users");
+            RegisterService<StatisticsServiceClient, IStatisticsServiceClient>(builder, "statistics");
+        }
 
-            builder.Register(x => new RemarkServiceClient(x.Resolve<IServiceClient>(), 
-                x.ResolveNamed<ServiceSettings>(RemarksSettingsKey)))
-                .As<IRemarkServiceClient>()
-                .SingleInstance();
+        private void RegisterService<TService, TInterface>(ContainerBuilder builder, string title) where TService : TInterface
+        {
+            var settingsKey = $"{title}-settings";
+            builder.Register(x => 
+            {
+                var settings = x.Resolve<ServicesSettings>()
+                                .FirstOrDefault(s => s.Title == $"{title}-service");
 
-            builder.Register(x => new StatisticsServiceClient(x.Resolve<IServiceClient>(), 
-                x.ResolveNamed<ServiceSettings>(StatisticsSettingsKey)))
-                .As<IStatisticsServiceClient>()
-                .SingleInstance();
+                return settings ?? new ServiceSettings();
+            })
+            .Named<ServiceSettings>(settingsKey)
+            .SingleInstance();
 
-            builder.Register(x => new UserServiceClient(x.Resolve<IServiceClient>(), 
-                x.ResolveNamed<ServiceSettings>(UsersSettingsKey)))
-                .As<IUserServiceClient>()
+            builder.Register(x => (TService)Activator.CreateInstance(typeof(TService), 
+                new object[]{x.Resolve<IServiceClient>(), 
+                x.ResolveNamed<ServiceSettings>(settingsKey)}))
+                .As<TInterface>()
                 .SingleInstance();
         }
     }

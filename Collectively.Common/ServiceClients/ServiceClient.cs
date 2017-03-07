@@ -43,7 +43,8 @@ namespace Collectively.Common.ServiceClients
 
         public async Task<Maybe<Stream>> GetStreamAsync(string name, string endpoint)
         {
-            var response = await _httpClient.GetAsync(GetUrl(name), endpoint);
+            var url = await GetServiceUrlAsync(name);
+            var response = await _httpClient.GetAsync(url, endpoint);
             if (response.HasNoValue)
                 return new Maybe<Stream>();
 
@@ -77,7 +78,7 @@ namespace Collectively.Common.ServiceClients
 
         private async Task<Maybe<T>> GetDataAsync<T>(string name, string endpoint) where T : class
         {
-            var url = GetUrl(name);
+            var url = await GetServiceUrlAsync(name);
             if (!_isAuthenticated && _serviceSettings != null)
             {
                 var token = await _serviceAuthenticatorClient.AuthenticateAsync(url, new Credentials
@@ -106,6 +107,8 @@ namespace Collectively.Common.ServiceClients
             return data;
         }
 
-        private static string GetUrl(string name) => $"http://{name}";
+        //TODO: Refactor once Consul will be a part of the solution.
+        private async Task<string> GetServiceUrlAsync(string name)
+            => await Task.FromResult($"http://{name}");
     }
 }
