@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Collectively.Common.Extensions;
 using Collectively.Common.Queries;
@@ -15,20 +15,21 @@ namespace Collectively.Common.ServiceClients
     public class ServiceClient : IServiceClient
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private bool _isAuthenticated = false;
-        private ServiceSettings _serviceSettings;
+        private IDictionary<string, string> _authenticatedServices = new Dictionary<string, string>();
+        private ServicesSettings _servicesSettings;
         private readonly IHttpClient _httpClient;
         private readonly IServiceAuthenticatorClient _serviceAuthenticatorClient;
 
-        public ServiceClient(IHttpClient httpClient, IServiceAuthenticatorClient serviceAuthenticatorClient)
+        public ServiceClient(IHttpClient httpClient, IServiceAuthenticatorClient serviceAuthenticatorClient,
+            ServicesSettings servicesSettings)
         {
             _httpClient = httpClient;
             _serviceAuthenticatorClient = serviceAuthenticatorClient;
-        }
-
-        public void SetSettings(ServiceSettings serviceSettings)
-        {
-            _serviceSettings = serviceSettings;
+            _servicesSettings = servicesSettings;
+            foreach(var service in _servicesSettings)
+            {
+                _authenticatedServices[service.Name] = string.Empty;
+            }
         }
 
         public async Task<Maybe<T>> GetAsync<T>(Resource resource) where T : class
@@ -59,7 +60,9 @@ namespace Collectively.Common.ServiceClients
             var url = await GetServiceUrlAsync(name);
             var response = await _httpClient.GetAsync(url, endpoint);
             if (response.HasNoValue)
+            {
                 return new Maybe<Stream>();
+            }
 
             return await response.Value.Content.ReadAsStreamAsync();
         }
@@ -71,7 +74,9 @@ namespace Collectively.Common.ServiceClients
         {
             var data = await GetDataAsync<IEnumerable<T>>(name, endpoint);
             if (data.HasNoValue)
+            {
                 return new Maybe<PagedResult<T>>();
+            }
 
             return data.Value.PaginateWithoutLimit();
         }
@@ -106,27 +111,30 @@ namespace Collectively.Common.ServiceClients
         private async Task<Maybe<T>> GetDataAsync<T>(string name, string endpoint) where T : class
         {
             var url = await GetServiceUrlAsync(name);
-            if (!_isAuthenticated && _serviceSettings != null)
+            var token = _authenticatedServices[name];
+            if (token.Empty())
             {
-                var token = await _serviceAuthenticatorClient.AuthenticateAsync(url, new Credentials
+                var settings = _servicesSettings.Single(x => x.Name == name);
+                var authenticationToken = await _serviceAuthenticatorClient.AuthenticateAsync(url, new Credentials
                 {
-                    Username = _serviceSettings.Username,
-                    Password = _serviceSettings.Password
+                    Username = settings.Username,
+                    Password = settings.Password
                 });
-                if (token.HasNoValue)
+                if (authenticationToken.HasNoValue)
                 {
-                    Logger.Error($"Could not get authentication token for service: '{_serviceSettings.Name}'.");
+                    Logger.Error($"Could not get authentication token for service: '{settings.Name}'.");
 
                     return null;
                 }
-
-                _httpClient.SetAuthorizationHeader(token.Value);
-                _isAuthenticated = true;
+                token = authenticationToken.Value;
             }
 
+            _httpClient.SetAuthorizationHeader(token);
             var response = await _httpClient.GetAsync(url, endpoint);
             if (response.HasNoValue)
+            {
                 return new Maybe<T>();
+            }
 
             var content = await response.Value.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<T>(content);

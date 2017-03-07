@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 using Collectively.Common.Queries;
-using Collectively.Common.Security;
 using Collectively.Common.Types;
 using Collectively.Messages.Events;
 
@@ -9,7 +8,6 @@ namespace Collectively.Common.ServiceClients
 {
     public interface IServiceClient
     {
-        void SetSettings(ServiceSettings serviceSettings);
         Task<Maybe<T>> GetAsync<T>(Resource resource) 
             where T : class;
         Task<Maybe<T>> GetAsync<T>(string name, string endpoint) 

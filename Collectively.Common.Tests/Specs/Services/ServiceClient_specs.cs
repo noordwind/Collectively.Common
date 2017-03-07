@@ -14,6 +14,7 @@ namespace Collectively.Common.Tests.Specs.Services
         protected static IServiceClient ServiceClient;
         protected static Mock<IHttpClient> HttpClientMock;
         protected static Mock<IServiceAuthenticatorClient> ServiceAuthenticatorClientMock;
+        protected static ServicesSettings ServicesSettings;
         protected static string ServiceName = "test";
         protected static string Endpoint = "users";
 
@@ -21,7 +22,17 @@ namespace Collectively.Common.Tests.Specs.Services
         {
             HttpClientMock = new Mock<IHttpClient>();
             ServiceAuthenticatorClientMock = new Mock<IServiceAuthenticatorClient>();
-            ServiceClient = new ServiceClient(HttpClientMock.Object, ServiceAuthenticatorClientMock.Object);
+            ServiceAuthenticatorClientMock.Setup(x => x.AuthenticateAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<Credentials>()))
+                                          .ReturnsAsync("token");
+            ServicesSettings = new ServicesSettings
+            {
+                new ServiceSettings
+                {
+                    Title = ServiceName,
+                    Name = ServiceName
+                }
+            };
+            ServiceClient = new ServiceClient(HttpClientMock.Object, ServiceAuthenticatorClientMock.Object, ServicesSettings);
         }
     }
 
