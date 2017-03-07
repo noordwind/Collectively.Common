@@ -6,7 +6,6 @@ using System.IO;
 using Collectively.Common.Extensions;
 using Collectively.Common.Security;
 using Collectively.Common.ServiceClients;
-using Collectively.Common.ServiceClients.Queries;
 
 namespace Collectively.Common.Tests.Specs.Services
 {
@@ -58,18 +57,22 @@ namespace Collectively.Common.Tests.Specs.Services
     public class when_invoking_service_client_get_filtered_collection_async : ServiceClient_specs
     {
         protected static Maybe<PagedResult<dynamic>> Result;
-        protected static BrowseUsers Query;
+        protected static TestQuery Query;
         protected static string QueryString;
+
+        protected class TestQuery : PagedQueryBase
+        {
+        }
 
         private Establish context = () =>
         {
             Initialize();
-            Query = new BrowseUsers { Page = 1, Results = 10 };
+            Query = new TestQuery { Page = 1, Results = 10 };
             QueryString = Endpoint.ToQueryString(Query);
         };
 
         Because of = () => Result = ServiceClient
-            .GetFilteredCollectionAsync<BrowseUsers, dynamic>(Query, ServiceName, Endpoint).Result;
+            .GetFilteredCollectionAsync<TestQuery, dynamic>(Query, ServiceName, Endpoint).Result;
 
         It should_call_http_client_get_async = () => HttpClientMock.Verify(x => x.GetAsync($"http://{ServiceName}", QueryString), Times.Once);
 
