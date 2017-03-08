@@ -61,8 +61,7 @@ namespace Collectively.Common.ServiceClients
 
         public async Task<Maybe<Stream>> GetStreamAsync(string name, string endpoint)
         {
-            var url = await GetServiceUrlAsync(name);
-            var response = await GetResponseAsync(url, endpoint);
+            var response = await GetResponseAsync(name, endpoint);
             if (response.HasNoValue)
             {
                 return new Maybe<Stream>();
@@ -116,7 +115,9 @@ namespace Collectively.Common.ServiceClients
         {
             var response = await GetResponseAsync(name, endpoint);
             if(response.HasNoValue)
-                return new Maybe<T>();
+            {
+                return null;
+            }
 
             var content = await response.Value.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<T>(content);
