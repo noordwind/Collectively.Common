@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using Collectively.Common.Extensions;
 using Collectively.Common.Queries;
@@ -58,7 +62,7 @@ namespace Collectively.Common.ServiceClients
         public async Task<Maybe<Stream>> GetStreamAsync(string name, string endpoint)
         {
             var url = await GetServiceUrlAsync(name);
-            var response = await _httpClient.GetAsync(url, endpoint);
+            var response = await GetResponseAsync(url, endpoint);
             if (response.HasNoValue)
             {
                 return new Maybe<Stream>();
@@ -110,11 +114,61 @@ namespace Collectively.Common.ServiceClients
 
         private async Task<Maybe<T>> GetDataAsync<T>(string name, string endpoint) where T : class
         {
+            var response = await GetResponseAsync(name, endpoint);
+            if(response.HasNoValue)
+                return new Maybe<T>();
+
+            var content = await response.Value.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<T>(content);
+
+            return data;
+        }
+
+        private async Task<Maybe<HttpResponseMessage>> GetResponseAsync(string name, string endpoint)
+        {
             var url = await GetServiceUrlAsync(name);
-            var token = _authenticatedServices[name];
+            var settings = _servicesSettings.SingleOrDefault(x => x.Name == name);
+            if(settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings), $"Settings for service: '{name}' were not found.");
+            }
+            await AuthenticateAsync(url, settings);
+
+            return await RetryGetResponseAsync(url, endpoint, settings);
+        }
+
+        private async Task<Maybe<HttpResponseMessage>> RetryGetResponseAsync(string url, string endpoint, ServiceSettings settings)
+        {
+            var retryNumber = 0;
+            var retryCount = settings.RetryCount <= 0 ? 1 : settings.RetryCount;
+            var retryDelayMilliseconds = settings.RetryDelayMilliseconds <= 0 ? 200 : settings.RetryDelayMilliseconds;
+            while (retryNumber < retryCount)
+            {
+                try
+                {
+                    Logger.Debug($"Fetch data from http endpoint: {endpoint}");
+                    var response = await _httpClient.GetAsync(url, endpoint);
+                    if(response.HasValue)
+                    {
+                        return response;
+                    }
+                    await Task.Delay(retryDelayMilliseconds);
+                    retryNumber++;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, $"Exception occured while fetching data from endpoint: {endpoint}");
+                }
+            }
+
+            return null;
+        }       
+
+        private async Task AuthenticateAsync(string url, ServiceSettings settings)
+        {
+            var token = _authenticatedServices[settings.Name];
             if (token.Empty())
             {
-                var settings = _servicesSettings.Single(x => x.Name == name);
                 var authenticationToken = await _serviceAuthenticatorClient.AuthenticateAsync(url, new Credentials
                 {
                     Username = settings.Username,
@@ -122,25 +176,12 @@ namespace Collectively.Common.ServiceClients
                 });
                 if (authenticationToken.HasNoValue)
                 {
-                    Logger.Error($"Could not get authentication token for service: '{settings.Name}'.");
-
-                    return null;
+                    throw new AuthenticationException("Could not get authentication token for service: '{settings.Name}'.");
                 }
                 token = authenticationToken.Value;
-                _authenticatedServices[name] = token;
+                _authenticatedServices[settings.Name] = token;
             }
-
             _httpClient.SetAuthorizationHeader(token);
-            var response = await _httpClient.GetAsync(url, endpoint);
-            if (response.HasNoValue)
-            {
-                return new Maybe<T>();
-            }
-
-            var content = await response.Value.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<T>(content);
-
-            return data;
         }
 
         //TODO: Refactor once Consul will be a part of the solution.

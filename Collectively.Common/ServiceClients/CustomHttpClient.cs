@@ -28,13 +28,15 @@ namespace Collectively.Common.ServiceClients
             {
                 var response = await _httpClient.GetAsync(GetFullAddress(url, endpoint));
                 if (response.IsSuccessStatusCode)
+                {
                     return response;
+                }
             }
             catch (Exception)
             {
             }
-
-            return new Maybe<HttpResponseMessage>();
+            
+            return null;
         }
 
         private string GetFullAddress(string url, string endpoint)
