@@ -15,6 +15,7 @@
     "Exceptionless": "4.0.1922",
     "Humanizer.Core": "2.1.0",
     "jose-jwt": "2.1.0",
+    "Microsoft.Azure.DocumentDB.Core": "1.1.0",
     "Microsoft.AspNetCore.Hosting": "1.1.0",
     "Microsoft.AspNetCore.Owin": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
