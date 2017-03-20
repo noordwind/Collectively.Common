@@ -16,6 +16,17 @@ namespace Collectively.Common.Files
         private static readonly double MediumSize = 640;
         private static readonly double BigSize = 1200;
 
+        public File ProcessImage(File file, double size)
+        {
+            using (var stream = new MemoryStream(file.Bytes))
+            {
+                var originalImage = new Image(stream);
+                var resizedImage = ScaleImage(originalImage, size);
+
+                return File.Create(file.Name, file.ContentType, resizedImage);
+            }
+        }
+
         public IDictionary<string, File> ProcessImage(File file)
         {
             Logger.Debug($"Processing image, name:{file.Name}, contentType:{file.ContentType}, " +
@@ -38,7 +49,7 @@ namespace Collectively.Common.Files
                 return dictionary;
             }
         }
-
+            
         private byte[] ScaleImage(Image image, double maxSize)
         {
             var ratioX = maxSize/image.Width;
