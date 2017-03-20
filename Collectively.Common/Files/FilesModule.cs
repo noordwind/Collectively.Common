@@ -19,6 +19,7 @@ namespace Collectively.Common.Files
         {
                 builder.RegisterType<FileValidator>().As<IFileValidator>().SingleInstance();
                 builder.RegisterType<FileResolver>().As<IFileResolver>().SingleInstance();
+                builder.RegisterType<ImageService>().As<IImageService>().SingleInstance();
                 builder.RegisterInstance(_configuration.GetSettings<AwsS3Settings>()).SingleInstance();
                 builder.RegisterType<AwsS3FileHandler>().As<IFileHandler>().SingleInstance();
                 builder.Register(c =>
