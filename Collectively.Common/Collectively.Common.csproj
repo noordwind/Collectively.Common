@@ -17,6 +17,7 @@
     <PackageReference Include="Collectively.Messages" Version="1.0.*" />
     <PackageReference Include="Autofac" Version="4.2.1" />
     <PackageReference Include="AutoMapper" Version="5.2.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.5.2" />
     <PackageReference Include="Exceptionless" Version="4.0.1922" />
     <PackageReference Include="Humanizer.Core" Version="2.1.0" />
     <PackageReference Include="jose-jwt" Version="2.1.0" />
@@ -36,6 +37,7 @@
     <PackageReference Include="Polly" Version="5.0.1-v5-0-alpha0001" />
     <PackageReference Include="RawRabbit" Version="1.10.3" />
     <PackageReference Include="RawRabbit.vNext" Version="1.10.3" />
+    <PackageReference Include="Structure.Sketching" Version="0.1.75" />
   </ItemGroup>
 
 </Project>
