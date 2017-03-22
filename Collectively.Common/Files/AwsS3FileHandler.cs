@@ -33,16 +33,6 @@ namespace Collectively.Common.Files
             onUploaded?.Invoke(url);
         }
 
-        public async Task<Maybe<FileStreamInfo>> GetFileStreamInfoAsync(Guid remarkId, string size)
-        {
-            return await Task.FromResult(new Maybe<FileStreamInfo>());
-        }
-
-        public async Task<Maybe<FileStreamInfo>> GetFileStreamInfoAsync(string fileId)
-        {
-            return await Task.FromResult(new Maybe<FileStreamInfo>());
-        }
-
         public async Task DeleteAsync(string name)
         {
             Logger.Debug($"Deleting file {name} from AWS S3 bucket: {_settings.Bucket}.");

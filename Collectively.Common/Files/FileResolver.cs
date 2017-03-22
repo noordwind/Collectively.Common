@@ -1,11 +1,17 @@
 ﻿using System;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Collectively.Common.Extensions;
 using Collectively.Common.Types;
+using NLog;
 
 namespace Collectively.Common.Files
 {
     public class FileResolver : IFileResolver
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         public Maybe<File> FromBase64(string base64, string name, string contentType)
         {
             if (base64.Empty())
@@ -23,6 +29,26 @@ namespace Collectively.Common.Files
             var bytes = Convert.FromBase64String(base64String);
             
             return File.Create(name, contentType, bytes);
+        }
+
+        public async Task<Maybe<Stream>> FromUrlAsync(string url)
+        {
+            try
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var result = await httpClient.GetAsync(url);
+                    var stream = await result.Content.ReadAsStreamAsync();
+
+                    return stream;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, $"There was an error when trying to get a stream from URL: {url}.");
+
+                return Stream.Null;
+            }
         }
     }
 }
