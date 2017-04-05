@@ -6,7 +6,7 @@ using Machine.Specifications;
 namespace Collectively.Common.Tests.Specs.Extensions
 {
     [Subject("StringExtensions EqualsCaseInvariant")]
-    public class When_comparing_same_strings_with_different_cases
+    public class when_comparing_same_strings_with_different_cases
     {
         protected static bool Result;
 
@@ -16,7 +16,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
     }
 
     [Subject("StringExtensions Like")]
-    public class When_checking_if_string_contains_substring_case_invariant
+    public class when_checking_if_string_contains_substring_case_invariant
     {
         protected static bool Result;
 
@@ -27,7 +27,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
 
 
     [Subject("StringExtensions IsEmail")]
-    public class When_checking_if_string_has_email_format
+    public class when_checking_if_string_has_email_format
     {
         protected static bool Result;
 
@@ -37,7 +37,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
     }
 
     [Subject("StringExtensions IsEmail")]
-    public class When_checking_if_string_has_email_format_but_at_sign_is_missing
+    public class when_checking_if_string_has_email_format_but_at_sign_is_missing
     {
         protected static bool Result;
 
@@ -48,7 +48,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
 
 
     [Subject("StringExtensions IsEmail")]
-    public class When_checking_if_string_has_email_format_but_domain_is_missing
+    public class when_checking_if_string_has_email_format_but_domain_is_missing
     {
         protected static bool Result;
 
@@ -59,7 +59,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
 
 
     [Subject("StringExtensions ToQueryString")]
-    public class When_converting_string_to_query_string
+    public class when_converting_string_to_query_string
     {
         protected class TestQuery : IQuery
         {

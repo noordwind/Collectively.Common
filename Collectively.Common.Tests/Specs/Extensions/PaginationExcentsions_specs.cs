@@ -20,7 +20,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
     }
 
     [Subject("PaginationExtensions ToPagedResult")]
-    public class When_converting_to_paged_results : PaginationExcentsions_specs
+    public class when_converting_to_paged_results : PaginationExcentsions_specs
     {
         protected static PagedResult<string> Result;
         
@@ -55,7 +55,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
     }
 
     [Subject("PaginationExtensions ToPagedResult")]
-    public class When_converting_to_paged_results_and_collection_is_empty : PaginationExcentsions_specs
+    public class when_converting_to_paged_results_and_collection_is_empty : PaginationExcentsions_specs
     {
         protected static PagedResult<string> Result;
 
@@ -81,7 +81,7 @@ namespace Collectively.Common.Tests.Specs.Extensions
     }
 
     [Subject("PaginationExtensions ToPagedResult")]
-    public class When_converting_to_paged_results_and_headers_are_missing : PaginationExcentsions_specs
+    public class when_converting_to_paged_results_and_headers_are_missing : PaginationExcentsions_specs
     {
         protected static PagedResult<string> Result;
 

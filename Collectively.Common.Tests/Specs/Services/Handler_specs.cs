@@ -40,7 +40,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned : Handler_specs
+    public class when_one_task_is_assigned : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -52,7 +52,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_and_on_success_is_defined : Handler_specs
+    public class when_one_task_is_assigned_and_on_success_is_defined : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -72,7 +72,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_but_not_executed : Handler_specs
+    public class when_one_task_is_assigned_but_not_executed : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -91,7 +91,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_and_task_throws_exception : Handler_specs
+    public class when_one_task_is_assigned_and_task_throws_exception : Handler_specs
     {
         Establish context = () =>
         {
@@ -115,7 +115,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_task_throws_exception_and_it_is_propagated : Handler_specs
+    public class when_one_task_is_assigned_task_throws_exception_and_it_is_propagated : Handler_specs
     {
         protected static Exception Exception;
 
@@ -146,7 +146,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_and_task_throws_custom_exception : Handler_specs
+    public class when_one_task_is_assigned_and_task_throws_custom_exception : Handler_specs
     {
         Establish context = () =>
         {
@@ -170,7 +170,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_and_execute_on_error_is_enabled : Handler_specs
+    public class when_one_task_is_assigned_task_throws_custom_exception_and_execute_on_error_is_enabled : Handler_specs
     {
         Establish context = () =>
         {
@@ -194,7 +194,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagated : Handler_specs
+    public class when_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagated : Handler_specs
     {
         protected static Exception Exception;
 
@@ -225,7 +225,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_execute_on_error_is_enabled_and_it_is_propagated : Handler_specs
+    public class when_one_task_is_assigned_task_throws_custom_exception_execute_on_error_is_enabled_and_it_is_propagated : Handler_specs
     {
         protected static Exception Exception;
 
@@ -256,7 +256,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler Execute")]
-    public class When_one_task_is_assigned_and_task_throws_custom_exception_but_custom_error_handler_is_not_defined : Handler_specs
+    public class when_one_task_is_assigned_and_task_throws_custom_exception_but_custom_error_handler_is_not_defined : Handler_specs
     {
         Establish context = () =>
         {
@@ -279,7 +279,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAll")]
-    public class When_two_tasks_are_assigned : Handler_specs
+    public class when_two_tasks_are_assigned : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -295,7 +295,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAll")]
-    public class When_two_tasks_are_assigned_and_first_throws_exception : Handler_specs
+    public class when_two_tasks_are_assigned_and_first_throws_exception : Handler_specs
     {
         Establish context = () =>
         {
@@ -332,7 +332,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAll")]
-    public class When_two_tasks_are_assigned_first_throws_exception_and_propagates_it : Handler_specs
+    public class when_two_tasks_are_assigned_first_throws_exception_and_propagates_it : Handler_specs
     {
         protected static Exception Exception;
 
@@ -377,7 +377,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAll")]
-    public class When_two_tasks_are_assigned_and_there_are_two_different_execute_all_calls : Handler_specs
+    public class when_two_tasks_are_assigned_and_there_are_two_different_execute_all_calls : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -403,7 +403,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_async : Handler_specs
+    public class when_one_task_is_assigned_async : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -416,7 +416,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_and_on_success_is_defined_async : Handler_specs
+    public class when_one_task_is_assigned_and_on_success_is_defined_async : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -437,7 +437,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_but_not_executed_async : Handler_specs
+    public class when_one_task_is_assigned_but_not_executed_async : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -456,7 +456,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_and_task_throws_exception_async : Handler_specs
+    public class when_one_task_is_assigned_and_task_throws_exception_async : Handler_specs
     {
         Establish context = () =>
         {
@@ -481,7 +481,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_task_throws_exception_and_it_is_propagated_async : Handler_specs
+    public class when_one_task_is_assigned_task_throws_exception_and_it_is_propagated_async : Handler_specs
     {
         protected static Exception Exception;
 
@@ -513,7 +513,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_and_task_throws_custom_exception_async : Handler_specs
+    public class when_one_task_is_assigned_and_task_throws_custom_exception_async : Handler_specs
     {
         Establish context = () =>
         {
@@ -538,7 +538,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_async_and_execute_on_error_is_enabled : Handler_specs
+    public class when_one_task_is_assigned_task_throws_custom_exception_async_and_execute_on_error_is_enabled : Handler_specs
     {
         Establish context = () =>
         {
@@ -563,7 +563,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagated_async : Handler_specs
+    public class when_one_task_is_assigned_task_throws_custom_exception_and_it_is_propagated_async : Handler_specs
     {
         protected static Exception Exception;
 
@@ -595,7 +595,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_task_throws_custom_exception_execute_on_error_is_enabled_and_it_is_propagated_async : Handler_specs
+    public class when_one_task_is_assigned_task_throws_custom_exception_execute_on_error_is_enabled_and_it_is_propagated_async : Handler_specs
     {
         protected static Exception Exception;
 
@@ -627,7 +627,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAsync")]
-    public class When_one_task_is_assigned_and_task_throws_custom_exception_but_custom_error_handler_is_not_defined_async : Handler_specs
+    public class when_one_task_is_assigned_and_task_throws_custom_exception_but_custom_error_handler_is_not_defined_async : Handler_specs
     {
         Establish context = () =>
         {
@@ -651,7 +651,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAllAsync")]
-    public class When_two_tasks_are_assigned_async : Handler_specs
+    public class when_two_tasks_are_assigned_async : Handler_specs
     {
         Establish context = () => Initialize();
 
@@ -668,7 +668,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAllAsync")]
-    public class When_two_tasks_are_assigned_and_first_throws_exception_async : Handler_specs
+    public class when_two_tasks_are_assigned_and_first_throws_exception_async : Handler_specs
     {
         Establish context = () =>
         {
@@ -706,7 +706,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAllAsync")]
-    public class When_two_tasks_are_assigned_first_throws_exception_and_propagates_it_async : Handler_specs
+    public class when_two_tasks_are_assigned_first_throws_exception_and_propagates_it_async : Handler_specs
     {
         protected static Exception Exception;
 
@@ -752,7 +752,7 @@ namespace Collectively.Common.Tests.Specs.Services
     }
 
     [Subject("Handler ExecuteAllAsync")]
-    public class When_two_tasks_are_assigned_and_there_are_two_different_execute_all_calls_async : Handler_specs
+    public class when_two_tasks_are_assigned_and_there_are_two_different_execute_all_calls_async : Handler_specs
     {
         Establish context = () => Initialize();
 

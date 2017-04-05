@@ -5,7 +5,7 @@ using Machine.Specifications;
 namespace Collectively.Common.Tests.Specs.Extensions
 {
     [Subject("DateTimeExtensions ToTimestamp")]
-    public class When_converting_date_time_to_js_timestamp
+    public class when_converting_date_time_to_js_timestamp
     {
         protected static DateTime DateTime;
         protected static long ExpectedValue = 946684800000;
