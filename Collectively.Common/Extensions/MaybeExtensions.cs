@@ -1,13 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Collectively.Common.Types;
 
 namespace Collectively.Common.Extensions
 {
     public static class MaybeExtensions
     {
-        public static Result<T> ToResult<T>(this Maybe<T> maybe, string errorMessage) where T : class
-            => maybe.HasNoValue ? Result.Fail<T>(errorMessage) : Result.Ok(maybe.Value);
-
         public static T Unwrap<T>(this Maybe<T> maybe, T defaultValue = null) where T : class
             => maybe.Unwrap(x => x, defaultValue);
 
@@ -36,6 +34,20 @@ namespace Collectively.Common.Extensions
                 return;
 
             action(maybe.Value);
+        }
+
+        public static async Task<T> UnwrapAsync<T>(this Task<Maybe<T>> maybe, Exception noValueException = null) where T : class
+        {
+            var result = await maybe;
+            if(result.HasValue)
+            {
+                return result.Value;
+            }
+            if(noValueException == null)
+            {
+                return default(T);
+            }
+            throw noValueException;
         }
     }
 }
