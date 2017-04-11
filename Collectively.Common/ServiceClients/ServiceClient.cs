@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Authentication;
 using System.Threading.Tasks;
@@ -111,18 +110,34 @@ namespace Collectively.Common.ServiceClients
             TQuery query, string name, string endpoint) where TQuery : class, IPagedQuery
             => GetFilteredCollectionAsync<TQuery, dynamic>(query, name, endpoint);
 
+        public async Task<Maybe<T>> PostAsync<T>(string name, string endpoint, object data) where T : class
+        {
+            var url = await GetServiceUrlAsync(name);
+            var response = await _httpClient.PostAsync(url, endpoint, data);
+
+            return await DeserializeAsync<T>(response);
+        }
+
         private async Task<Maybe<T>> GetDataAsync<T>(string name, string endpoint) where T : class
         {
             var response = await GetResponseAsync(name, endpoint);
+
+            return await DeserializeAsync<T>(response);
+        }
+
+        private static async Task<Maybe<T>> DeserializeAsync<T>(Maybe<HttpResponseMessage> response) where T : class
+        {
             if(response.HasNoValue)
             {
                 return null;
             }
-
+            if (!response.Value.IsSuccessStatusCode)
+            {
+                return null;
+            }
             var content = await response.Value.Content.ReadAsStringAsync();
-            var data = JsonConvert.DeserializeObject<T>(content);
 
-            return data;
+            return JsonConvert.DeserializeObject<T>(content);
         }
 
         private async Task<Maybe<HttpResponseMessage>> GetResponseAsync(string name, string endpoint)
@@ -188,5 +203,5 @@ namespace Collectively.Common.ServiceClients
         //TODO: Refactor once Consul will be a part of the solution.
         private async Task<string> GetServiceUrlAsync(string name)
             => await Task.FromResult($"http://{name}");
-    }
+  }
 }

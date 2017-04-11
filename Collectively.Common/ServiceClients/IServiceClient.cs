@@ -34,5 +34,7 @@ namespace Collectively.Common.ServiceClients
         Task<Maybe<PagedResult<dynamic>>> GetFilteredCollectionAsync<TQuery>(TQuery query,
             string name, string endpoint)
             where TQuery : class, IPagedQuery;
+        Task<Maybe<T>> PostAsync<T>(string name, string endpoint, object data) 
+            where T : class;
     }
 }

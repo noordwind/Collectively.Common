@@ -8,5 +8,6 @@ namespace Collectively.Common.ServiceClients
     {
         void SetAuthorizationHeader(string token);
         Task<Maybe<HttpResponseMessage>> GetAsync(string url, string endpoint);
+        Task<Maybe<HttpResponseMessage>> PostAsync(string url, string endpoint, object data);
     }
 }
