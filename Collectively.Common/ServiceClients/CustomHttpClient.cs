@@ -45,11 +45,8 @@ namespace Collectively.Common.ServiceClients
         {
             var payload = JsonConvert.SerializeObject(data);
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
-            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
-            var response = await _httpClient.PostAsync(GetFullAddress(url, endpoint), content);
-            _httpClient.DefaultRequestHeaders.Remove("Content-Type");
-
-            return response;
+            
+            return await _httpClient.PostAsync(GetFullAddress(url, endpoint), content);
         }
 
         private string GetFullAddress(string url, string endpoint)
