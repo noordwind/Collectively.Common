@@ -46,7 +46,7 @@ namespace Collectively.Common.ServiceClients
             var payload = JsonConvert.SerializeObject(data);
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
-            return await _httpClient.PostAsync(endpoint, content);
+            return await _httpClient.PostAsync(GetFullAddress(url, endpoint), content);
         }
 
         private string GetFullAddress(string url, string endpoint)
