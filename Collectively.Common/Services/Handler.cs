@@ -8,8 +8,6 @@ namespace Collectively.Common.Services
     {
         private readonly IExceptionHandler _exceptionHandler;
         private readonly ISet<IHandlerTask> _handlerTasks = new HashSet<IHandlerTask>();
-        private Action _validate;
-        private Func<Task> _validateAsync;
 
         public Handler(IExceptionHandler exceptionHandler)
         {
@@ -18,7 +16,7 @@ namespace Collectively.Common.Services
 
         public IHandlerTask Run(Action run)
         {
-            var handlerTask = new HandlerTask(this, run, _validate, _validateAsync, _exceptionHandler);
+            var handlerTask = new HandlerTask(this, run, exceptionHandler: _exceptionHandler);
             _handlerTasks.Add(handlerTask);
 
             return handlerTask;
@@ -26,25 +24,17 @@ namespace Collectively.Common.Services
 
         public IHandlerTask Run(Func<Task> runAsync)
         {
-            var handlerTask = new HandlerTask(this, runAsync, _validate, _validateAsync, _exceptionHandler);
+            var handlerTask = new HandlerTask(this, runAsync, exceptionHandler: _exceptionHandler);
             _handlerTasks.Add(handlerTask);
 
             return handlerTask;
         }
 
-        public IHandler Validate(Action validate)
-        {
-            _validate = validate;
+        public IHandlerTaskRunner Validate(Action validate)
+            => new HandlerTaskRunner(this, _exceptionHandler, validate, null, _handlerTasks);
 
-            return this;
-        }
-
-        public IHandler Validate(Func<Task> validateAsync)
-        {
-            _validateAsync = validateAsync;
-
-            return this;
-        }        
+        public IHandlerTaskRunner Validate(Func<Task> validateAsync)
+            => new HandlerTaskRunner(this, _exceptionHandler, null, validateAsync, _handlerTasks);       
 
         public void ExecuteAll()
         {

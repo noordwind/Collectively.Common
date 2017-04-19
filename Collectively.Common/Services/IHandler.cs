@@ -7,8 +7,8 @@ namespace Collectively.Common.Services
     {
         IHandlerTask Run(Action run);
         IHandlerTask Run(Func<Task> runAsync);
-        IHandler Validate(Action validate);
-        IHandler Validate(Func<Task> validateAsync);
+        IHandlerTaskRunner Validate(Action validate);
+        IHandlerTaskRunner Validate(Func<Task> validateAsync);
         void ExecuteAll();
         Task ExecuteAllAsync();
     }
