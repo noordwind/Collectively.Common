@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Collectively.Common/Collectively.Common.csproj" />
+    <ProjectReference Include="../../src/Collectively.Common/Collectively.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
