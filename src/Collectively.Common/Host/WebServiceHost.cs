@@ -32,16 +32,15 @@ namespace Collectively.Common.Host
             }            
 
             Console.Title = name;
+            var servicePort = port.HasValue && port > 0 ? port : 5000;
             var webHostBuilder = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
-                .UseStartup<TStartup>();
-                
-            if(port.HasValue && port > 0)
-            {
-                webHostBuilder.UseUrls($"http://*:{port}");
-            }
-            var builder = new Builder(webHostBuilder.Build());
+                .UseUrls($"http://*:{servicePort}")
+                .UseStartup<TStartup>()
+                .Build();
+
+            var builder = new Builder(webHostBuilder);
 
             return builder;
         }
@@ -100,7 +99,7 @@ namespace Collectively.Common.Host
             public BusBuilder SubscribeToCommand<TCommand>() where TCommand : ICommand
             {
                 var commandHandler = _resolver.Resolve<ICommandHandler<TCommand>>();
-                _bus.WithCommandHandlerAsync(commandHandler, _queueName);
+                _bus.WithCommandHandler(commandHandler, _queueName);
 
                 return this;
             }
@@ -108,7 +107,7 @@ namespace Collectively.Common.Host
             public BusBuilder SubscribeToEvent<TEvent>() where TEvent : IEvent
             {
                 var eventHandler = _resolver.Resolve<IEventHandler<TEvent>>();
-                _bus.WithEventHandlerAsync(eventHandler, _queueName);
+                _bus.WithEventHandler(eventHandler, _queueName);
 
                 return this;
             }
