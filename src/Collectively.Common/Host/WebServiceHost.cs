@@ -24,7 +24,7 @@ namespace Collectively.Common.Host
             _webHost.Run();
         }
 
-        public static Builder Create<TStartup>(string name = "", int port = 80) where TStartup : class
+        public static Builder Create<TStartup>(string name = "", int? port = null) where TStartup : class
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -32,13 +32,16 @@ namespace Collectively.Common.Host
             }            
 
             Console.Title = name;
-            var webHost = new WebHostBuilder()
+            var webHostBuilder = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
-                .UseStartup<TStartup>()
-                .UseUrls($"http://*:{port}")
-                .Build();
-            var builder = new Builder(webHost);
+                .UseStartup<TStartup>();
+                
+            if(port.HasValue && port > 0)
+            {
+                webHostBuilder.UseUrls($"http://*:{port}");
+            }
+            var builder = new Builder(webHostBuilder.Build());
 
             return builder;
         }
