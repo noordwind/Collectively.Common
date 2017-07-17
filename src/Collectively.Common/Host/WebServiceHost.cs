@@ -32,15 +32,17 @@ namespace Collectively.Common.Host
             }            
 
             Console.Title = name;
-            var servicePort = port.HasValue && port > 0 ? port : 5000;
             var webHostBuilder = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseKestrel()
-                .UseUrls($"http://*:{servicePort}")
-                .UseStartup<TStartup>()
-                .Build();
+                .UseStartup<TStartup>();
 
-            var builder = new Builder(webHostBuilder);
+            if(port > 0 && port <= 65535)
+            {
+                webHostBuilder.UseUrls($"http://*:{port}");
+            }
+
+            var builder = new Builder(webHostBuilder.Build());
 
             return builder;
         }
