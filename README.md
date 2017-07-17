@@ -1,21 +1,16 @@
 # Collectively.Common
 
-####**Keep your commune clean in just a few clicks.**
-
 |Branch             |Build status                                                  
 |-------------------|-----------------------------------------------------
 |master             |[![master branch build status](https://api.travis-ci.org/noordwind/Collectively.Common.svg?branch=master)](https://travis-ci.org/noordwind/Collectively.Common)
 |develop            |[![develop branch build status](https://api.travis-ci.org/noordwind/Collectively.Common.svg?branch=develop)](https://travis-ci.org/noordwind/Collectively.Common/branches)
 
-**What is Collectively?**
+**Let's go for the better, Collectively​​.**
 ----------------
 
-Have you ever felt unhappy or even angry about the litter left on the streets or in the woods? Or the damaged things that should've been fixed a long time ago, yet the city council might not even be aware of them?
+**Collectively** is an open platform to enhance communication between counties and its residents​. It's made as a fully open source & cross-platform solution by [Noordwind](https://noordwind.com).
 
-**Collectively** is an open source & cross-platform solution that provides applications and a services made for all of the inhabitants to make them even more aware about keeping the community clean. 
-Within a few clicks you can greatly improve the overall tidiness of the place where you live in. 
-
-**Collectively** may help you not only to quickly submit a new remark about the pollution or broken stuff, but also to browse the already sent remarks and help to clean them up if you feel up to the task of keeping your neighborhood a clean place.
+Find out more at [becollective.ly](http://becollective.ly)
 
 **Collectively.Common**
 ----------------
