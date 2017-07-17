@@ -7,6 +7,7 @@ using Collectively.Messages.Events;
 using Collectively.Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using RawRabbit;
+using Microsoft.Extensions.Configuration;
 
 namespace Collectively.Common.Host
 {
@@ -24,24 +25,26 @@ namespace Collectively.Common.Host
             _webHost.Run();
         }
 
-        public static Builder Create<TStartup>(string name = "", int? port = null) where TStartup : class
+        public static Builder Create<TStartup>(string name = "", string[] args = null, int? port = null) where TStartup : class
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 name = $"Collectively Service: {typeof(TStartup).Namespace.Split('.').Last()}";
             }            
-
             Console.Title = name;
+            var config = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddCommandLine(args)
+                .Build();
             var webHostBuilder = new WebHostBuilder()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseConfiguration(config)
                 .UseKestrel()
                 .UseStartup<TStartup>();
-
             if(port > 0 && port <= 65535)
             {
                 webHostBuilder.UseUrls($"http://*:{port}");
             }
-
             var builder = new Builder(webHostBuilder.Build());
 
             return builder;
