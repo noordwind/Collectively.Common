@@ -1,11 +1,12 @@
 ﻿using System;
+using Collectively.Common.Types;
 
 namespace Collectively.Common.Security
 {
     public interface IJwtTokenHandler
     {
-        string Create(string userId, TimeSpan? expiry = null);
-        JwtToken GetFromAuthorizationHeader(string authorizationHeader);
-        bool IsValid(JwtToken token);
+        Maybe<JsonWebToken> Parse(string token);
+        Maybe<JsonWebToken> Create(string userId, string role, TimeSpan? expiry = null);
+        Maybe<string> GetFromAuthorizationHeader(string authorizationHeader);
     }
 }

@@ -33,7 +33,9 @@ namespace Collectively.Common.Security
             if (credentials.Username.Equals(_serviceSettings.Username) && 
                 credentials.Password.Equals(_serviceSettings.Password))
             {
-                return _jwtTokenHandler.Create(credentials.Username, Expiry);
+                var token = _jwtTokenHandler.Create(credentials.Username, string.Empty, Expiry);
+
+                return token.Value.Token;
             }
 
             return null;

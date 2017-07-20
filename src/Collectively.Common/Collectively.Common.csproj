@@ -20,11 +20,11 @@
     <PackageReference Include="AWSSDK.S3" Version="3.3.5.2" />
     <PackageReference Include="Exceptionless" Version="4.0.1922" />
     <PackageReference Include="Humanizer.Core" Version="2.1.0" />
-    <PackageReference Include="jose-jwt" Version="2.1.0" />
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.1.1" />
