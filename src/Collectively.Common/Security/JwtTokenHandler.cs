@@ -33,10 +33,8 @@ namespace Collectively.Common.Security
             }
             TokenValidationParameters = new TokenValidationParameters
             {
-                RequireExpirationTime = true,
-                RequireSignedTokens = true,
                 ValidateAudience = false,
-                ValidateLifetime = true,
+                ValidIssuer = _settings.Issuer,
                 ValidateIssuer = _settings.ValidateIssuer,
                 IssuerSigningKey = _settings.UseRsa ? _rsaPublicKey : _hmacSecretKey
             }; 
@@ -100,28 +98,25 @@ namespace Collectively.Common.Security
         private JsonWebToken CreateToken(string userId, string role, DateTime expires,
             SigningCredentials signingCredentials)
         {
-            var now = DateTime.UtcNow;
-            var claims = new Claim[]
+            var centuryBegin = new DateTime(1970, 1, 1);
+            var exp = new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds;
+            var now = new TimeSpan(DateTime.UtcNow.Ticks - centuryBegin.Ticks).TotalSeconds;
+            var issuer = _settings.Issuer ?? string.Empty;
+            var payload = new JwtPayload
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId),
-                new Claim(JwtRegisteredClaimNames.UniqueName, userId),
-                new Claim(ClaimTypes.Role, role),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString()),
+                {"sub", userId},
+                {"iss", issuer},
+                {"iat", (long)now},
+                {"exp", (long)exp}
             };
-            var jwt = new JwtSecurityToken(
-                issuer: _settings.Issuer,
-                claims: claims,
-                notBefore: now,
-                expires: expires,
-                signingCredentials: signingCredentials
-            );
+            var header = new JwtHeader(signingCredentials);
+            var jwt = new JwtSecurityToken(header, payload);
             var token = JwtSecurityTokenHandler.WriteToken(jwt);
 
             return new JsonWebToken
             {
                 Token = token,
-                Expires = expires.ToTimestamp()
+                Expires = (long)exp
             };
         }
 
