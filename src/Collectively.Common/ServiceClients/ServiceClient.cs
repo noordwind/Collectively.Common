@@ -194,7 +194,7 @@ namespace Collectively.Common.ServiceClients
                 {
                     throw new AuthenticationException("Could not get authentication token for service: '{settings.Name}'.");
                 }
-                token = authenticationToken.Value;
+                token = authenticationToken.Value.Token;
                 _authenticatedServices[settings.Name] = token;
             }
             _httpClient.SetAuthorizationHeader(token);

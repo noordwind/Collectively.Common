@@ -4,6 +4,6 @@ namespace Collectively.Common.Security
 {
     public interface IServiceAuthenticatorHost
     {
-         Maybe<string> CreateToken(Credentials credentials);
+         Maybe<JwtBasic> CreateToken(Credentials credentials);
     }
 }

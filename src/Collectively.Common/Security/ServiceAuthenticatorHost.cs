@@ -20,7 +20,7 @@ namespace Collectively.Common.Security
             _serviceSettings = serviceSettings;
         }
         
-        public Maybe<string> CreateToken(Credentials credentials)
+        public Maybe<JwtBasic> CreateToken(Credentials credentials)
         {
             if (credentials == null)
             {
@@ -35,7 +35,7 @@ namespace Collectively.Common.Security
             {
                 var token = _jwtTokenHandler.Create(credentials.Username, string.Empty, Expiry);
 
-                return token.Value.Token;
+                return token.Value;
             }
 
             return null;

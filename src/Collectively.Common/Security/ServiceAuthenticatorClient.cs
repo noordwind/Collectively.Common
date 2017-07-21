@@ -19,7 +19,7 @@ namespace Collectively.Common.Security
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json"); 
         }
 
-        public async Task<Maybe<string>> AuthenticateAsync(string serviceUrl, Credentials credentials)
+        public async Task<Maybe<JwtBasic>> AuthenticateAsync(string serviceUrl, Credentials credentials)
         {
             var data = new 
             {
@@ -32,18 +32,13 @@ namespace Collectively.Common.Security
                          serviceUrl;
 
             var response = await PostAsync($"{serviceUrl}{AuthenticationEndpoint}", data);
-            var token = await DeserializeAsync<TokenResponse>(response);
+            var token = await DeserializeAsync<JwtBasic>(response);
             if (token == null)
             {
                 return null;
             }
 
-            return token.Token;
-        }
-
-        private class TokenResponse
-        {
-            public string Token { get; set; }
+            return token;
         }
 
         private async Task<HttpResponseMessage> PostAsync(string endpoint, object data)

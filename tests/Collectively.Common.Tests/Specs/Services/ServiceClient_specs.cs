@@ -23,7 +23,7 @@ namespace Collectively.Common.Tests.Specs.Services
             HttpClientMock = new Mock<IHttpClient>();
             ServiceAuthenticatorClientMock = new Mock<IServiceAuthenticatorClient>();
             ServiceAuthenticatorClientMock.Setup(x => x.AuthenticateAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<Credentials>()))
-                                          .ReturnsAsync("token");
+                                          .ReturnsAsync(new JwtBasic { Token = "token" });
             ServicesSettings = new ServicesSettings
             {
                 new ServiceSettings
