@@ -35,35 +35,6 @@ namespace Collectively.Common.Security
             InitializeJwtParameters();
         }
 
-        public Maybe<JwtBasic> Create(string userId, string role, TimeSpan? expiry = null)
-        {
-            var nowUtc = DateTime.UtcNow;
-            var expires = (expiry.HasValue ? 
-                nowUtc.AddTicks(expiry.Value.Ticks) : 
-                nowUtc.AddDays(_settings.ExpiryDays));
-            var centuryBegin = new DateTime(1970, 1, 1);
-            var exp = (long)(new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
-            var now = (long)(new TimeSpan(nowUtc.Ticks - centuryBegin.Ticks).TotalSeconds);
-            var issuer = _settings.Issuer ?? string.Empty;
-            var payload = new JwtPayload
-            {
-                {"sub", userId},
-                {"iss", issuer},
-                {"iat", now},
-                {"nbf", now},
-                {"exp", exp},
-                {"jti", Guid.NewGuid().ToString("N")}
-            };
-            var jwt = new JwtSecurityToken(_jwtHeader, payload);
-            var token = _jwtSecurityTokenHandler.WriteToken(jwt);
-
-            return new JwtBasic
-            {
-                Token = token,
-                Expires = exp
-            };
-        }
-
         private void InitializeRsa()
         {
             using(RSA publicRsa = RSA.Create())
@@ -105,6 +76,35 @@ namespace Collectively.Common.Security
                 ValidateIssuer = _settings.ValidateIssuer,
                 IssuerSigningKey = _issuerSigningKey
             }; 
+        }
+
+        public Maybe<JwtBasic> Create(string userId, string role, TimeSpan? expiry = null)
+        {
+            var nowUtc = DateTime.UtcNow;
+            var expires = (expiry.HasValue ? 
+                nowUtc.AddTicks(expiry.Value.Ticks) : 
+                nowUtc.AddDays(_settings.ExpiryDays));
+            var centuryBegin = new DateTime(1970, 1, 1);
+            var exp = (long)(new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
+            var now = (long)(new TimeSpan(nowUtc.Ticks - centuryBegin.Ticks).TotalSeconds);
+            var issuer = _settings.Issuer ?? string.Empty;
+            var payload = new JwtPayload
+            {
+                {"sub", userId},
+                {"iss", issuer},
+                {"iat", now},
+                {"nbf", now},
+                {"exp", exp},
+                {"jti", Guid.NewGuid().ToString("N")}
+            };
+            var jwt = new JwtSecurityToken(_jwtHeader, payload);
+            var token = _jwtSecurityTokenHandler.WriteToken(jwt);
+
+            return new JwtBasic
+            {
+                Token = token,
+                Expires = exp
+            };
         }
 
         public Maybe<string> GetFromAuthorizationHeader(string authorizationHeader)
