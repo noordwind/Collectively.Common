@@ -74,6 +74,10 @@ namespace Collectively.Common.Security
                 publicRsa.FromXmlString(publicKeyXml);
                 _issuerSigningKey = new RsaSecurityKey(publicRsa);
             }
+            if(_settings.RsaPrivateKeyXML.Empty())
+            {
+                return;
+            }
             using(RSA privateRsa = RSA.Create())
             {
                 var privateKeyXml = _settings.UseRsaFilePath ? 
