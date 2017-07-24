@@ -84,7 +84,7 @@ namespace Collectively.Common.Security
             var expires = (expiry.HasValue ? 
                 nowUtc.AddTicks(expiry.Value.Ticks) : 
                 nowUtc.AddDays(_settings.ExpiryDays));
-            var centuryBegin = new DateTime(1970, 1, 1);
+            var centuryBegin = new DateTime(1970, 1, 1).ToUniversalTime();
             var exp = (long)(new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
             var now = (long)(new TimeSpan(nowUtc.Ticks - centuryBegin.Ticks).TotalSeconds);
             var issuer = _settings.Issuer ?? string.Empty;
@@ -95,7 +95,9 @@ namespace Collectively.Common.Security
                 {"iat", now},
                 {"nbf", now},
                 {"exp", exp},
-                {"jti", Guid.NewGuid().ToString("N")}
+                {"jti", Guid.NewGuid().ToString("N")},
+                {"unique_name", userId},
+                {"http://schemas.microsoft.com/ws/2008/06/identity/claims/role", role}
             };
             var jwt = new JwtSecurityToken(_jwtHeader, payload);
             var token = _jwtSecurityTokenHandler.WriteToken(jwt);
