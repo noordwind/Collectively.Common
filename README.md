@@ -1,4 +1,7 @@
-# Collectively.Common
+![Collectively](https://github.com/noordwind/Collectively/blob/master/assets/collectively_logo.png)
+
+----------------
+
 
 |Branch             |Build status                                                  
 |-------------------|-----------------------------------------------------

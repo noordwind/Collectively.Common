@@ -8,9 +8,6 @@
     <PackageId>Collectively.Common</PackageId>
     <PackageProjectUrl>https://github.com/noordwind/Collectively.Common</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/noordwind/Collectively.Common/blob/master/LICENSE</PackageLicenseUrl>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
   <ItemGroup>
