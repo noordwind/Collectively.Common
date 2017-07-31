@@ -93,7 +93,6 @@ namespace Collectively.Common.Security
                 {"sub", userId},
                 {"iss", issuer},
                 {"iat", now},
-                {"nbf", now},
                 {"exp", exp},
                 {"jti", Guid.NewGuid().ToString("N")},
                 {"unique_name", userId},
