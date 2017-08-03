@@ -14,6 +14,8 @@ namespace Collectively.Common.Security
     public class JwtTokenHandler : IJwtTokenHandler
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly string RoleClaim = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+        private static readonly string StateClaim = "state";
         private readonly JwtTokenSettings _settings;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
         private TokenValidationParameters _tokenValidationParameters;
@@ -78,7 +80,7 @@ namespace Collectively.Common.Security
             }; 
         }
 
-        public Maybe<JwtBasic> Create(string userId, string role, TimeSpan? expiry = null)
+        public Maybe<JwtBasic> Create(string userId, string role, TimeSpan? expiry = null, string state = "active")
         {
             var nowUtc = DateTime.UtcNow;
             var expires = (expiry.HasValue ? 
@@ -96,7 +98,8 @@ namespace Collectively.Common.Security
                 {"exp", exp},
                 {"jti", Guid.NewGuid().ToString("N")},
                 {"unique_name", userId},
-                {"http://schemas.microsoft.com/ws/2008/06/identity/claims/role", role}
+                {StateClaim, state},
+                {RoleClaim, role}
             };
             var jwt = new JwtSecurityToken(_jwtHeader, payload);
             var token = _jwtSecurityTokenHandler.WriteToken(jwt);
@@ -140,7 +143,9 @@ namespace Collectively.Common.Security
                 {
                     Subject = validatedJwt.Subject,
                     Claims = validatedJwt.Claims,
-                    Expires = validatedJwt.ValidTo.ToTimestamp(),
+                    Role = validatedJwt.Claims.FirstOrDefault(x => x.Type == RoleClaim)?.Value,
+                    State = validatedJwt.Claims.FirstOrDefault(x => x.Type == StateClaim)?.Value,
+                    Expires = validatedJwt.ValidTo.ToTimestamp()
                 };
             }
             catch(Exception exception)

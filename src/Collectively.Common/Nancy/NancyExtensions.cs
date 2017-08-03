@@ -23,14 +23,20 @@ namespace Collectively.Common.Nancy
             var jwtTokenHandler = container.Resolve<IJwtTokenHandler>();
             var statelessAuthConfiguration = new StatelessAuthenticationConfiguration(ctx =>
             {
-                var token = jwtTokenHandler.GetFromAuthorizationHeader(ctx.Request.Headers.Authorization);
-                if(token.HasNoValue)
+                var authToken = jwtTokenHandler.GetFromAuthorizationHeader(ctx.Request.Headers.Authorization);
+                if(authToken.HasNoValue)
                 {
                     return null;
                 }
-                var jwt = jwtTokenHandler.Parse(token.Value);
+                var jwt = jwtTokenHandler.Parse(authToken.Value);
+                if(jwt.HasNoValue)
+                {
+                    return null;
+                }
+                var token = jwt.Value;
 
-                return jwt.HasValue ? new CollectivelyIdentity(jwt.Value.Subject) : null;
+                return jwt.HasValue ? new CollectivelyIdentity(token.Subject, 
+                    token.Role, token.State, token.Claims) : null;
             });
             StatelessAuthentication.Enable(pipelines, statelessAuthConfiguration);            
         }
