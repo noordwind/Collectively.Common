@@ -182,6 +182,10 @@ namespace Collectively.Common.ServiceClients
 
         private async Task AuthenticateAsync(string url, ServiceSettings settings)
         {
+            if(settings.NoAuth)
+            {
+                return;
+            }
             var token = _authenticatedServices[settings.Name];
             if (token.Empty())
             {
