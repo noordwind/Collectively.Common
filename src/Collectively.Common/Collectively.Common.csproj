@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
@@ -32,9 +33,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta5" />
     <PackageReference Include="Polly" Version="5.3.1" />
-    <PackageReference Include="RawRabbit" Version="1.10.3" />
-    <PackageReference Include="RawRabbit.vNext" Version="1.10.3" />
-    <PackageReference Include="Structure.Sketching" Version="0.1.75" />
+    <PackageReference Include="RawRabbit" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.DependencyInjection.ServiceCollection" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Extensions" Version="1.10.3" />
+    <PackageReference Include="RawRabbit.Enrichers.Polly" Version="2.0.0-beta8" />
+    <PackageReference Include="RawRabbit.Operations.Subscribe" Version="2.0.0-beta8" />
+    <PackageReference Include="Structure.Sketching" Version="0.1.96" />
   </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ using Polly;
 using RabbitMQ.Client.Exceptions;
 using RawRabbit;
 using RawRabbit.Configuration;
-using RawRabbit.vNext;
+using RawRabbit.Instantiation;
 
 namespace Collectively.Common.RabbitMq
 {
@@ -31,7 +31,10 @@ namespace Collectively.Common.RabbitMq
 
             builder.RegisterInstance(configuration).SingleInstance();
             policy.Execute(() => builder
-                    .RegisterInstance(BusClientFactory.CreateDefault(configuration))
+                    .RegisterInstance(RawRabbitFactory.CreateSingleton(new RawRabbitOptions
+                    {
+                        ClientConfiguration  = configuration
+                    }))
                     .As<IBusClient>()
             );
         }
