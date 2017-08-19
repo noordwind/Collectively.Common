@@ -23,6 +23,6 @@ It's being automatically published to the [MyGet](https://www.myget.org) after t
 
 **Solution structure**
 ----------------
-- **Collectively.Common** - core project that can be built via *dotnet build* command.
+- **Collectively.Common** - core project that can be built via *dotnet build --no-restore* command.
 - **Collectively.Common.Tests** - unit & integration tests executable via *dotnet test* command.
 
