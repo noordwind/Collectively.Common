@@ -44,7 +44,7 @@ namespace Collectively.Common.Security
                 var publicKeyXml = _settings.UseRsaFilePath ? 
                     System.IO.File.ReadAllText(_settings.RsaPublicKeyXML) :
                     _settings.RsaPublicKeyXML;
-                publicRsa.FromXmlString(publicKeyXml);
+                RSACryptoServiceProviderExtensions.FromXmlString(publicRsa, publicKeyXml);
                 _issuerSigningKey = new RsaSecurityKey(publicRsa);
             }
             if(_settings.RsaPrivateKeyXML.Empty())
@@ -56,7 +56,7 @@ namespace Collectively.Common.Security
                 var privateKeyXml = _settings.UseRsaFilePath ? 
                     System.IO.File.ReadAllText(_settings.RsaPrivateKeyXML) :
                     _settings.RsaPrivateKeyXML;
-                privateRsa.FromXmlString(privateKeyXml);
+                RSACryptoServiceProviderExtensions.FromXmlString(privateRsa, privateKeyXml);
                 var privateKey = new RsaSecurityKey(privateRsa);
                 _signingCredentials = new SigningCredentials(privateKey, SecurityAlgorithms.RsaSha256);
             }
