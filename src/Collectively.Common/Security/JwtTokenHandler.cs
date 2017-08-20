@@ -8,6 +8,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using Collectively.Common.Types;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using ThirdParty.BouncyCastle.OpenSsl;
+using System.IO;
 
 namespace Collectively.Common.Security
 {
@@ -47,16 +50,28 @@ namespace Collectively.Common.Security
                 RSACryptoServiceProviderExtensions.FromXmlString(publicRsa, publicKeyXml);
                 _issuerSigningKey = new RsaSecurityKey(publicRsa);
             }
-            if(_settings.RsaPrivateKeyXML.Empty())
+            if(_settings.RsaPrivateKey.Empty())
             {
                 return;
             }
             using(RSA privateRsa = RSA.Create())
             {
-                var privateKeyXml = _settings.UseRsaFilePath ? 
-                    System.IO.File.ReadAllText(_settings.RsaPrivateKeyXML) :
-                    _settings.RsaPrivateKeyXML;
-                RSACryptoServiceProviderExtensions.FromXmlString(privateRsa, privateKeyXml);
+                if(_settings.UseRsaFilePath)
+                {
+                    using(var streamReader = File.OpenText(_settings.RsaPrivateKey))
+                    {
+                        var pemReader = new PemReader(streamReader);
+                        privateRsa.ImportParameters(pemReader.ReadPrivatekey());
+                    }                    
+                }
+                else 
+                {
+                    using(var stringReader = new StringReader(_settings.RsaPrivateKey))
+                    {
+                        var pemReader = new PemReader(stringReader);
+                        privateRsa.ImportParameters(pemReader.ReadPrivatekey());
+                    }
+                }
                 var privateKey = new RsaSecurityKey(privateRsa);
                 _signingCredentials = new SigningCredentials(privateKey, SecurityAlgorithms.RsaSha256);
             }

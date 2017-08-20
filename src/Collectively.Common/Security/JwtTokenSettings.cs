@@ -8,7 +8,7 @@
         public bool ValidateIssuer { get; set; }
         public bool UseRsa { get; set; }
         public bool UseRsaFilePath { get; set; }
-        public string RsaPrivateKeyXML { get; set; }
+        public string RsaPrivateKey { get; set; }
         public string RsaPublicKeyXML { get; set; }
     }
 }
