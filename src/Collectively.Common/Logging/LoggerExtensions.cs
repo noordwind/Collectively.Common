@@ -27,12 +27,8 @@ namespace Collectively.Common.Logging
             {
                 throw new ArgumentException("Log level can not be empty.", nameof(settings.Level));
             }
-            loggerFactory.AddSerilog();
-            if (settings.DebugEnabled)
-            {
-                loggerFactory.AddDebug();
-            }
             var level = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), settings.Level, true);
+            loggerFactory.AddSerilog();
             if (!settings.ElkEnabled)
             {
                 Log.Logger = new LoggerConfiguration()
