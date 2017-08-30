@@ -29,7 +29,7 @@ namespace Collectively.Common.Files
 
         public IDictionary<string, File> ProcessImage(File file)
         {
-            Logger.Debug($"Processing image, name:{file.Name}, contentType:{file.ContentType}, " +
+            Logger.Information($"Processing image, name:{file.Name}, contentType:{file.ContentType}, " +
                          $"sizeBytes:{file.SizeBytes}");
 
             using (var stream = new MemoryStream(file.Bytes))
