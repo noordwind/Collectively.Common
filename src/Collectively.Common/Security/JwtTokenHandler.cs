@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using NLog;
+using Serilog;
 using Collectively.Common.Extensions;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -16,7 +16,7 @@ namespace Collectively.Common.Security
 {
     public class JwtTokenHandler : IJwtTokenHandler
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
         private static readonly string RoleClaim = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
         private static readonly string StateClaim = "state";
         private readonly JwtTokenSettings _settings;

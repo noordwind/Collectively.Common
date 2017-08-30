@@ -4,13 +4,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Collectively.Common.Extensions;
 using Collectively.Common.Types;
-using NLog;
+using Serilog;
 
 namespace Collectively.Common.Files
 {
     public class FileResolver : IFileResolver
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
 
         public Maybe<File> FromBase64(string base64, string name, string contentType)
         {

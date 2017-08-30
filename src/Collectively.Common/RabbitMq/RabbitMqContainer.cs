@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using Autofac;
-using NLog;
+using Serilog;
 using Polly;
 using RabbitMQ.Client.Exceptions;
 using RawRabbit;
@@ -12,7 +12,7 @@ namespace Collectively.Common.RabbitMq
 {
     public static class RabbitMqContainer
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
 
         public static void Register(ContainerBuilder builder, RawRabbitConfiguration configuration, int retryAttempts = 5)
         {

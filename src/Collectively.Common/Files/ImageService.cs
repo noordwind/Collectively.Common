@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NLog;
+using Serilog;
 using Structure.Sketching;
 using Structure.Sketching.Filters.Resampling;
 using Structure.Sketching.Filters.Resampling.Enums;
@@ -11,7 +11,7 @@ namespace Collectively.Common.Files
 {
     public class ImageService : IImageService
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
         private static readonly double SmallSize = 200;
         private static readonly double MediumSize = 640;
         private static readonly double BigSize = 1200;

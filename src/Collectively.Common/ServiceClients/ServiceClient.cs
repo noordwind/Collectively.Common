@@ -11,13 +11,13 @@ using Collectively.Common.Security;
 using Collectively.Common.Types;
 using Collectively.Messages.Events;
 using Newtonsoft.Json;
-using NLog;
+using Serilog;
 
 namespace Collectively.Common.ServiceClients
 {
     public class ServiceClient : IServiceClient
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
         private IDictionary<string, string> _authenticatedServices = new Dictionary<string, string>();
         private ServicesSettings _servicesSettings;
         private readonly IHttpClient _httpClient;

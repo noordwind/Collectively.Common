@@ -4,13 +4,13 @@ using System.IO;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Collectively.Common.Types;
-using NLog;
+using Serilog;
 
 namespace Collectively.Common.Files
 {
     public class AwsS3FileHandler : IFileHandler
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
         private readonly IAmazonS3 _client;
         private readonly AwsS3Settings _settings;
 

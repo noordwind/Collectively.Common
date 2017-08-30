@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Collectively.Common.Domain;
-using NLog;
+using Serilog;
 
 namespace Collectively.Common.Services
 {
     public class HandlerTask : IHandlerTask
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
         private readonly IExceptionHandler _exceptionHandler;
         private readonly IHandler _handler;
         private readonly Action _run;
@@ -19,13 +19,13 @@ namespace Collectively.Common.Services
         private Action _onSuccess;
         private Func<Task> _onSuccessAsync;
         private Action<Exception> _onError;
-        private Action<Exception, Logger> _onErrorWithLogger;
+        private Action<Exception, ILogger> _onErrorWithLogger;
         private Action<CollectivelyException> _onCustomError;
-        private Action<CollectivelyException, Logger> _onCustomErrorWithLogger;
+        private Action<CollectivelyException, ILogger> _onCustomErrorWithLogger;
         private Func<Exception, Task> _onErrorAsync;
-        private Func<Exception, Logger, Task> _onErrorWithLoggerAsync;
+        private Func<Exception, ILogger, Task> _onErrorWithLoggerAsync;
         private Func<CollectivelyException, Task> _onCustomErrorAsync;
-        private Func<CollectivelyException, Logger, Task> _onCustomErrorWithLoggerAsync;
+        private Func<CollectivelyException, ILogger, Task> _onCustomErrorWithLoggerAsync;
         private bool _propagateException = true;
         private bool _executeOnError = true;
 
@@ -87,7 +87,7 @@ namespace Collectively.Common.Services
             return this;
         }
 
-        public IHandlerTask OnCustomError(Action<CollectivelyException, Logger> onCustomError, 
+        public IHandlerTask OnCustomError(Action<CollectivelyException, ILogger> onCustomError, 
             bool propagateException = false, bool executeOnError = false)
         {
             _onCustomErrorWithLogger = onCustomError;
@@ -107,7 +107,7 @@ namespace Collectively.Common.Services
             return this;
         }
 
-        public IHandlerTask OnCustomError(Func<CollectivelyException, Logger, Task> onCustomError, 
+        public IHandlerTask OnCustomError(Func<CollectivelyException, ILogger, Task> onCustomError, 
             bool propagateException = false, bool executeOnError = false)
         {
             _onCustomErrorWithLoggerAsync = onCustomError;
@@ -125,7 +125,7 @@ namespace Collectively.Common.Services
             return this;
         }
 
-        public IHandlerTask OnError(Action<Exception, Logger> onError, bool propagateException = false)
+        public IHandlerTask OnError(Action<Exception, ILogger> onError, bool propagateException = false)
         {
             _onErrorWithLogger = onError;
             _propagateException = propagateException;
@@ -141,7 +141,7 @@ namespace Collectively.Common.Services
             return this;
         }
 
-        public IHandlerTask OnError(Func<Exception, Logger, Task> onError, bool propagateException = false)
+        public IHandlerTask OnError(Func<Exception, ILogger, Task> onError, bool propagateException = false)
         {
             _onErrorWithLoggerAsync = onError;
             _propagateException = propagateException;

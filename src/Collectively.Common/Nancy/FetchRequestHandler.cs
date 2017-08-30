@@ -6,7 +6,7 @@ using Collectively.Common.Queries;
 using Collectively.Common.Types;
 using Nancy;
 using Nancy.Responses.Negotiation;
-using NLog;
+using Serilog;
 using System.Linq;
 using AutoMapper;
 
@@ -14,7 +14,7 @@ namespace Collectively.Common.Nancy
 {
     public class FetchRequestHandler<TQuery, TResult> where TQuery : IQuery, new() where TResult : class
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger _logger = Log.Logger;
         private readonly string PageParameter = "page";
         private readonly TQuery _query;
         private readonly Func<TQuery, Task<Maybe<TResult>>> _fetch;

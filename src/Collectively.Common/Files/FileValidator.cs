@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
-using NLog;
+using Serilog;
 using Structure.Sketching;
 
 namespace Collectively.Common.Files
 {
     public class FileValidator : IFileValidator
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = Log.Logger;
 
         public bool IsImage(File file)
         {
