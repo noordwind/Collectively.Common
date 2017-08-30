@@ -50,6 +50,9 @@ namespace Collectively.Common.Logging
                     {
                         MinimumLogEventLevel = level,
                         AutoRegisterTemplate = true,
+                        IndexFormat = settings.IndexFormat.Empty() ? 
+                            "logstash-{0:yyyy.MM.dd}" : 
+                            settings.IndexFormat,
                         ModifyConnectionSettings = x => 
                             settings.UseBasicAuth ? 
                             x.BasicAuthentication(settings.Username, settings.Password) : 
