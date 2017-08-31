@@ -63,9 +63,9 @@ namespace Collectively.Common.Caching
 
         public async Task AddToSortedSetAsync(string key, string value, int score, int? limit = null)
         {
-            if(limit > 0)
+            if(limit.HasValue)
             {
-                await _database.SortedSetRemoveRangeByRankAsync(key, 0, (-1)*(limit.Value+1));
+                await _database.SortedSetRemoveRangeByRankAsync(key, 0, limit.Value);
             }
             await _database.SortedSetAddAsync(key, value, score);
         }
