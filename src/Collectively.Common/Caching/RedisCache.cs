@@ -53,6 +53,26 @@ namespace Collectively.Common.Caching
             await _database.StringSetAsync(GetKey(key), Serialize(value), expiry);
         }
 
+        public async Task<IEnumerable<string>> GetSortedSetAsync(string key, string value, int? limit = null)
+        {
+            var take = limit.HasValue ? limit.Value : -1;
+            var results = await _database.SortedSetRangeByRankAsync(key, 0, take);
+
+            return results.Select(x => x.ToString());
+        }
+
+        public async Task AddToSortedSetAsync(string key, string value, int score, int? limit = null)
+        {
+            if(limit > 0)
+            {
+                await _database.SortedSetRemoveRangeByRankAsync(key, 0, (-1)*(limit.Value+1));
+            }
+            await _database.SortedSetAddAsync(key, value, score);
+        }
+
+        public async Task RemoveFromSortedSetAsync(string key, string value)
+            => await _database.SortedSetRemoveAsync(key, value);
+
         public async Task GeoAddAsync(string key, double longitude, double latitude, string name)
         {
             if (!Available)
