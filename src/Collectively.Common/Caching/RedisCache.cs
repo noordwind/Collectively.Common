@@ -53,7 +53,7 @@ namespace Collectively.Common.Caching
             await _database.StringSetAsync(GetKey(key), Serialize(value), expiry);
         }
 
-        public async Task<IEnumerable<string>> GetSortedSetAsync(string key, string value, int? limit = null)
+        public async Task<IEnumerable<string>> GetSortedSetAsync(string key, int? limit = null)
         {
             var take = limit.HasValue ? limit.Value : -1;
             var results = await _database.SortedSetRangeByRankAsync(key, 0, take);

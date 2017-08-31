@@ -9,7 +9,7 @@ namespace Collectively.Common.Caching
     {
         Task<Maybe<T>> GetAsync<T>(string key) where T : class;
         Task<IEnumerable<T>> GetManyAsync<T>(params string[] keys) where T : class;
-        Task<IEnumerable<string>> GetSortedSetAsync(string key, string value, int? limit = null);
+        Task<IEnumerable<string>> GetSortedSetAsync(string key, int? limit = null);
         Task AddToSortedSetAsync(string key, string value, int score, int? limit = null);
         Task RemoveFromSortedSetAsync(string key, string value);
         Task AddAsync(string key, object value, TimeSpan? expiry = null);
