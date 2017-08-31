@@ -9,7 +9,8 @@ namespace Collectively.Common.Locations
             return DistanceTo(baseCoordinates, targetCoordinates, UnitOfLength.Kilometers);
         }
 
-        public static double DistanceTo(this Coordinates baseCoordinates, Coordinates targetCoordinates, UnitOfLength unitOfLength)
+        public static double DistanceTo(this Coordinates baseCoordinates, Coordinates targetCoordinates, 
+            UnitOfLength unitOfLength)
         {
             var baseRad = Math.PI * baseCoordinates.Latitude / 180;
             var targetRad = Math.PI * targetCoordinates.Latitude/ 180;

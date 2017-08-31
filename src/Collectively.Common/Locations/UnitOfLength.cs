@@ -3,6 +3,7 @@ namespace Collectively.Common.Locations
     public class UnitOfLength
     {
         private readonly double _fromMilesFactor;
+        public static UnitOfLength Meters = new UnitOfLength(1609.344);
         public static UnitOfLength Kilometers = new UnitOfLength(1.609344);
         public static UnitOfLength NauticalMiles = new UnitOfLength(0.8684);
         public static UnitOfLength Miles = new UnitOfLength(1);
