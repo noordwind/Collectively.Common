@@ -53,10 +53,23 @@ namespace Collectively.Common.Caching
             await _database.StringSetAsync(GetKey(key), Serialize(value), expiry);
         }
 
+        public async Task AddToSetAsync(string key, object value)
+            => await _database.SetAddAsync(GetKey(key), Serialize(value));
+
+        public async Task<IEnumerable<T>> GetSetAsync<T>(string key)
+        {
+            var results = await _database.SetMembersAsync(GetKey(key));
+
+            return results.Select(x => Deserialize<T>(x));
+        }
+
+        public async Task RemoveFromSetAsync(string key, object value)
+            => await _database.SetRemoveAsync(GetKey(key), Serialize(value));
+
         public async Task<IEnumerable<string>> GetSortedSetAsync(string key, int? limit = null)
         {
             var take = limit.HasValue ? limit.Value : -1;
-            var results = await _database.SortedSetRangeByRankAsync(key, 0, take);
+            var results = await _database.SortedSetRangeByRankAsync(GetKey(key), 0, take);
 
             return results.Select(x => x.ToString());
         }
@@ -65,9 +78,9 @@ namespace Collectively.Common.Caching
         {
             if(limit >= 0)
             {
-                await _database.SortedSetRemoveRangeByRankAsync(key, 0, (-1)*limit.Value);
+                await _database.SortedSetRemoveRangeByRankAsync(GetKey(key), 0, (-1)*limit.Value);
             }
-            await _database.SortedSetAddAsync(key, value, score);
+            await _database.SortedSetAddAsync(GetKey(key), value, score);
         }
 
         public async Task RemoveFromSortedSetAsync(string key, string value)
