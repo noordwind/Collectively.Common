@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
+using ImageSharp;
 using Serilog;
-using Structure.Sketching;
 
 namespace Collectively.Common.Files
 {
@@ -13,10 +13,8 @@ namespace Collectively.Common.Files
         {
             try
             {
-                using (var stream = new MemoryStream(file.Bytes))
+                using(var image = Image.Load(file.Bytes))
                 {
-                    var image = new Image(stream);
-
                     return image.Width > 0 && image.Height > 0;
                 }
             }
