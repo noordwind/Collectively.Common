@@ -53,8 +53,14 @@ namespace Collectively.Common.Caching
             await _database.StringSetAsync(GetKey(key), Serialize(value), expiry);
         }
 
+        public async Task AddToSetAsync(string key, string value)
+            => await _database.SetAddAsync(GetKey(key), value);
+
         public async Task AddToSetAsync(string key, object value)
             => await _database.SetAddAsync(GetKey(key), Serialize(value));
+
+        public async Task AddManyToSetAsync(string key, IEnumerable<string> values)
+            => await _database.SetAddAsync(GetKey(key), values.Select(x => (RedisValue)x).ToArray());
 
         public async Task<IEnumerable<T>> GetSetAsync<T>(string key)
         {
@@ -62,6 +68,9 @@ namespace Collectively.Common.Caching
 
             return results.Select(x => Deserialize<T>(x));
         }
+
+        public async Task RemoveFromSetAsync(string key, string value)
+            => await _database.SetRemoveAsync(GetKey(key), value);
 
         public async Task RemoveFromSetAsync(string key, object value)
             => await _database.SetRemoveAsync(GetKey(key), Serialize(value));
@@ -140,6 +149,5 @@ namespace Collectively.Common.Caching
 
         private static T Deserialize<T>(string serializedObject)
             => serializedObject.Empty() ? default(T) : JsonConvert.DeserializeObject<T>(serializedObject);
-
     }
 }
