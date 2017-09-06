@@ -62,6 +62,14 @@ namespace Collectively.Common.Caching
         public async Task AddManyToSetAsync(string key, IEnumerable<string> values)
             => await _database.SetAddAsync(GetKey(key), values.Select(x => (RedisValue)x).ToArray());
 
+        
+        public async Task<IEnumerable<string>> GetSetStringsAsync<T>(string key)
+        {
+            var results = await _database.SetMembersAsync(GetKey(key));
+
+            return results.Select(x => (string)x);
+        }
+
         public async Task<IEnumerable<T>> GetSetAsync<T>(string key)
         {
             var results = await _database.SetMembersAsync(GetKey(key));
