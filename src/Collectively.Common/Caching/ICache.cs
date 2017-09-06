@@ -12,8 +12,8 @@ namespace Collectively.Common.Caching
         Task AddToSetAsync(string key, string value);
         Task AddToSetAsync(string key, object value);
         Task AddManyToSetAsync(string key, IEnumerable<string> values);
+        Task<IEnumerable<string>> GetSetAsync(string key);
         Task<IEnumerable<T>> GetSetAsync<T>(string key);
-        Task<IEnumerable<string>> GetSetStringsAsync<T>(string key);
         Task RemoveFromSetAsync(string key, string value);
         Task RemoveFromSetAsync(string key, object value);
         Task<IEnumerable<string>> GetSortedSetAsync(string key, int? limit = null);
