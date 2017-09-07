@@ -29,9 +29,9 @@ namespace Collectively.Common.Files
 
             using(var originalImage = Image.Load(file.Bytes))
             {
-                var smallImage = ScaleImage(originalImage, SmallSize);
-                var mediumImage = ScaleImage(originalImage, MediumSize);
                 var bigImage = ScaleImage(originalImage, BigSize);
+                var mediumImage = ScaleImage(originalImage, MediumSize);
+                var smallImage = ScaleImage(originalImage, SmallSize);
                 var dictionary = new Dictionary<string, File>
                 {
                     {"small", File.Create(file.Name, file.ContentType, smallImage)},
@@ -53,7 +53,7 @@ namespace Collectively.Common.Files
             using (var stream = new MemoryStream())
             {
                 image.Resize(newWidth, newHeight)
-                     .Save(stream, ImageFormats.Jpeg);
+                     .SaveAsJpeg(stream);
                 
                 return stream.ToArray();
             }
