@@ -103,16 +103,14 @@ namespace Collectively.Common.Host
 
             public BusBuilder SubscribeToCommand<TCommand>() where TCommand : ICommand
             {
-                var commandHandler = _resolver.Resolve<ICommandHandler<TCommand>>();
-                _bus.WithCommandHandlerAsync(commandHandler, _queueName);
+                _bus.WithCommandHandlerAsync<TCommand>(_resolver, _queueName);
 
                 return this;
             }
 
             public BusBuilder SubscribeToEvent<TEvent>() where TEvent : IEvent
             {
-                var eventHandler = _resolver.Resolve<IEventHandler<TEvent>>();
-                _bus.WithEventHandlerAsync(eventHandler, _queueName);
+                _bus.WithEventHandlerAsync<TEvent>(_resolver, _queueName);
 
                 return this;
             }
