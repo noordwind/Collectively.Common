@@ -14,11 +14,11 @@ namespace Collectively.Common.Security
 
             builder.RegisterType<ServiceAuthenticatorClient>()
                 .As<IServiceAuthenticatorClient>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
             
             builder.RegisterType<ServiceAuthenticatorHost>()
                 .As<IServiceAuthenticatorHost>()
-                .SingleInstance();
+                .InstancePerLifetimeScope();
 
             builder.RegisterInstance(configuration.GetSettings<JwtTokenSettings>())
                 .SingleInstance();
