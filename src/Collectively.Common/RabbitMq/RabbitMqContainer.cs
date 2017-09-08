@@ -28,15 +28,17 @@ namespace Collectively.Common.RabbitMq
                                                 $"Retries: {retryCount}, duration: {timeSpan}");
                     }
                 );
-
             builder.RegisterInstance(configuration).SingleInstance();
-            policy.Execute(() => builder
-                    .RegisterInstance(RawRabbitFactory.CreateSingleton(new RawRabbitOptions
-                    {
-                        ClientConfiguration  = configuration
-                    }))
-                    .As<IBusClient>()
-            );
+            policy.Execute(() =>
+            {
+                builder.Register(context => RawRabbitFactory.CreateInstanceFactory(new RawRabbitOptions
+                {
+                    DependencyInjection = ioc => ioc.AddSingleton(configuration)
+                }))
+                .As<IInstanceFactory>()
+                .SingleInstance();
+                builder.Register(context => context.Resolve<IInstanceFactory>().Create());
+            } );
         }
     }
 }
