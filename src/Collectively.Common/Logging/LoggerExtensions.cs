@@ -45,19 +45,19 @@ namespace Collectively.Common.Logging
             Log.Logger = new LoggerConfiguration()
                .Enrich.FromLogContext()
                .MinimumLevel.Is(level)
-               .WriteTo.Elasticsearch().WriteTo.Elasticsearch(
-                    new ElasticsearchSinkOptions(new Uri(settings.ApiUrl))
-                    {
-                        MinimumLogEventLevel = level,
-                        AutoRegisterTemplate = true,
-                        IndexFormat = settings.IndexFormat.Empty() ? 
-                            "logstash-{0:yyyy.MM.dd}" : 
-                            settings.IndexFormat,
-                        ModifyConnectionSettings = x => 
-                            settings.UseBasicAuth ? 
-                            x.BasicAuthentication(settings.Username, settings.Password) : 
-                            x
-                    }) 
+               .WriteTo.Elasticsearch(
+                new ElasticsearchSinkOptions(new Uri(settings.ApiUrl))
+                {
+                    MinimumLogEventLevel = level,
+                    AutoRegisterTemplate = true,
+                    IndexFormat = settings.IndexFormat.Empty() ? 
+                        "logstash-{0:yyyy.MM.dd}" : 
+                        settings.IndexFormat,
+                    ModifyConnectionSettings = x => 
+                        settings.UseBasicAuth ? 
+                        x.BasicAuthentication(settings.Username, settings.Password) : 
+                        x
+                }) 
                .CreateLogger();
         }
     }

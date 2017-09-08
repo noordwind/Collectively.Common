@@ -147,11 +147,10 @@ namespace Collectively.Common.Security
 
         public Maybe<JwtDetails> Parse(string token)
         {
-            var handler = new JwtSecurityTokenHandler();
             SecurityToken validatedSecurityToken = null;
             try
             {
-                handler.ValidateToken(token, _tokenValidationParameters, out validatedSecurityToken);
+                _jwtSecurityTokenHandler.ValidateToken(token, _tokenValidationParameters, out validatedSecurityToken);
                 var validatedJwt = validatedSecurityToken as JwtSecurityToken;
 
                 return new JwtDetails
