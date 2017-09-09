@@ -5,9 +5,11 @@ using Autofac;
 using Collectively.Messages.Commands;
 using Collectively.Messages.Events;
 using Collectively.Common.Extensions;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using RawRabbit;
 using Microsoft.Extensions.Configuration;
+using Lockbox.Client.Extensions;
 
 namespace Collectively.Common.Host
 {
@@ -25,29 +27,38 @@ namespace Collectively.Common.Host
             _webHost.Run();
         }
 
-        public static Builder Create<TStartup>(string name = "", string[] args = null, int? port = null) where TStartup : class
+        public static Builder Create<TStartup>(string name = "", string[] args = null, 
+            bool useLockbox = true) where TStartup : class
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 name = $"Collectively Service: {typeof(TStartup).Namespace.Split('.').Last()}";
             }            
             Console.Title = name;
-            var config = new ConfigurationBuilder()
+            var webHost = WebHost
+                .CreateDefaultBuilder(args)
+                .UseStartup<TStartup>()
+                .UseConfiguration(new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)
+                .Build())
+                .ConfigureAppConfiguration((builderContext, config) =>
+                {
+                    var env = builderContext.HostingEnvironment;
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    if (!useLockbox)
+                    {
+                        return;
+                    }
+                    if (env.IsProduction() || env.IsDevelopment())
+                    {
+                        config.AddLockbox();
+                    }
+                })
                 .Build();
-            var webHostBuilder = new WebHostBuilder()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseConfiguration(config)
-                .UseKestrel()
-                .UseStartup<TStartup>();
-            if(port > 0 && port <= 65535)
-            {
-                webHostBuilder.UseUrls($"http://*:{port}");
-            }
-            var builder = new Builder(webHostBuilder.Build());
-
-            return builder;
+                
+            return new Builder(webHost);
         }
 
         public abstract class BuilderBase
