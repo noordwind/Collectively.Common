@@ -35,9 +35,10 @@ namespace Collectively.Common.Host
                 name = $"Collectively Service: {typeof(TStartup).Namespace.Split('.').Last()}";
             }            
             Console.Title = name;
-            var webHost = WebHost
-                .CreateDefaultBuilder(args)
+            var webHost = new WebHostBuilder()
                 .UseStartup<TStartup>()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(new ConfigurationBuilder()
                 .AddEnvironmentVariables()
                 .AddCommandLine(args)
@@ -47,6 +48,11 @@ namespace Collectively.Common.Host
                     var env = builderContext.HostingEnvironment;
                     config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                    config.AddEnvironmentVariables();
+                    if (args != null)
+                    {
+                        config.AddCommandLine(args);
+                    }
                     if (!useLockbox)
                     {
                         return;
@@ -56,6 +62,11 @@ namespace Collectively.Common.Host
                         config.AddLockbox();
                     }
                 })
+                .UseIISIntegration()
+                .UseDefaultServiceProvider((context, options) =>
+                {
+                    options.ValidateScopes = context.HostingEnvironment.IsEnvironment("local");
+                })                
                 .Build();
                 
             return new Builder(webHost);
