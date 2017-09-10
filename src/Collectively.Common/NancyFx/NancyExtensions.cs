@@ -4,7 +4,7 @@ using Nancy;
 using Nancy.Authentication.Stateless;
 using Nancy.Bootstrapper;
 
-namespace Collectively.Common.Nancy
+namespace Collectively.Common.NancyFx
 {
     public static class NancyExtensions
     {

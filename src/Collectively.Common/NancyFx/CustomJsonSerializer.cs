@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Collectively.Common.Nancy
+namespace Collectively.Common.NancyFx
 {
     public sealed class CustomJsonSerializer : JsonSerializer
     {

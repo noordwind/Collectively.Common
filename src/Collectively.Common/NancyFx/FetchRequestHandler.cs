@@ -10,7 +10,7 @@ using Serilog;
 using System.Linq;
 using AutoMapper;
 
-namespace Collectively.Common.Nancy
+namespace Collectively.Common.NancyFx
 {
     public class FetchRequestHandler<TQuery, TResult> where TQuery : IQuery, new() where TResult : class
     {

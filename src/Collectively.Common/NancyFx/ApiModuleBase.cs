@@ -8,7 +8,7 @@ using Nancy;
 using Nancy.ModelBinding;
 using Nancy.Responses;
 
-namespace Collectively.Common.Nancy
+namespace Collectively.Common.NancyFx
 {
     public abstract class ApiModuleBase : NancyModule
     {
