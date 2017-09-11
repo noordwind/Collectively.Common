@@ -20,17 +20,18 @@ namespace Collectively.Common.Files
             _settings = settings;
         }
 
-        public async Task UploadAsync(File file, string newName, Action<string> onUploaded = null)
+        public async Task UploadAsync(File file, string newName, Action<string,string> onUploaded = null)
         {
             Logger.Information($"Uploading file {file.Name} -> {newName} to AWS S3 bucket: {_settings.Bucket}.");
-            var url = $"https://s3.{_settings.Region}.amazonaws.com/{_settings.Bucket}/{newName}";
+            var baseUrl = $"https://{_settings.Bucket}.s3.{_settings.Region}.amazonaws.com";
+            var fullUrl = $"{baseUrl}/{newName}";
             using (var stream = new MemoryStream(file.Bytes))
             {
                 await _client.UploadObjectFromStreamAsync(_settings.Bucket, newName,
                     stream, new Dictionary<string, object>());
             }
             Logger.Information($"Completed uploading file {file.Name} -> {newName} to AWS S3 bucket: {_settings.Bucket}.");
-            onUploaded?.Invoke(url);
+            onUploaded?.Invoke(baseUrl, fullUrl);
         }
 
         public async Task DeleteAsync(string name)
