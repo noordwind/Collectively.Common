@@ -36,10 +36,16 @@ namespace Collectively.Common.Files
 
         public async Task DeleteAsync(string name)
         {
-            Logger.Information($"Deleting file {name} from AWS S3 bucket: {_settings.Bucket}.");
-            var url = $"https://s3.{_settings.Region}.amazonaws.com/{_settings.Bucket}/";
-            await _client.DeleteObjectAsync(_settings.Bucket, name);
-            Logger.Information($"Completed deleting file {name} from AWS S3 bucket: {_settings.Bucket}.");
+            var bucket = _settings.Bucket;
+            if (name.Contains("/"))
+            {
+                var bucketWithName = name.Split('/');
+                bucket = $"{bucket}/{bucketWithName[0]}";
+                name = bucketWithName[1];
+            }
+            Logger.Information($"Deleting file {name} from AWS S3 bucket: {bucket}.");
+            await _client.DeleteObjectAsync(bucket, name);
+            Logger.Information($"Completed deleting file {name} from AWS S3 bucket: {bucket}.");
         }
     }
 }
