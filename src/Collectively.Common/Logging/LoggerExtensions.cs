@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.SystemConsole;
 using Collectively.Common.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -29,12 +30,16 @@ namespace Collectively.Common.Logging
             }
             var level = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), settings.Level, true);
             loggerFactory.AddSerilog();
+            var configuration = new LoggerConfiguration()
+                    .Enrich.FromLogContext()
+                    .MinimumLevel.Is(level);
+            if (settings.ConsoleEnabled)
+            {
+                configuration.WriteTo.ColoredConsole(level);
+            }
             if (!settings.ElkEnabled)
             {
-                Log.Logger = new LoggerConfiguration()
-                    .Enrich.FromLogContext()
-                    .MinimumLevel.Is(level)
-                    .CreateLogger();
+                Log.Logger = configuration.CreateLogger();
 
                 return;
             }
@@ -42,9 +47,7 @@ namespace Collectively.Common.Logging
             {
                 throw new ArgumentException("ELK API URL can not be empty.", nameof(settings.ApiUrl));
             }
-            Log.Logger = new LoggerConfiguration()
-               .Enrich.FromLogContext()
-               .MinimumLevel.Is(level)
+            Log.Logger = configuration
                .WriteTo.Elasticsearch(
                 new ElasticsearchSinkOptions(new Uri(settings.ApiUrl))
                 {
