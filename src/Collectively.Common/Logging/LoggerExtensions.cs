@@ -18,7 +18,6 @@ namespace Collectively.Common.Logging
             var settings = new SerilogSettings();
             configuration.GetSection("serilog").Bind(settings);
             services.AddSingleton<SerilogSettings>(settings);
-            services.AddLogging();
         }
 
         public static void UseSerilog(this IApplicationBuilder app, ILoggerFactory loggerFactory)
