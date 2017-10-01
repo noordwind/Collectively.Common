@@ -86,6 +86,7 @@ namespace Collectively.Common.Host
             public Builder(IWebHost webHost)
             {
                 _webHost = webHost;
+                _resolver = new DefaultResolver(webHost);
             }
 
             public Builder UseAutofac(ILifetimeScope scope)
