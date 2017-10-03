@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Collectively.Common.Extensions;
@@ -24,19 +25,30 @@ namespace Collectively.Common.Locations
         }
 
         public async Task<Maybe<LocationResponse>> GetAsync(string address)
-        => await GetAsync(address, 0, 0);
+        => await RetryGetAsync(address, 0, 0);
 
         public async Task<Maybe<LocationResponse>> GetAsync(double latitude, double longitude)
-        => await GetAsync(string.Empty, latitude, longitude);
+        => await RetryGetAsync(string.Empty, latitude, longitude);
 
-        public async Task<Maybe<LocationResponse>> GetAsync(string address, double latitude, double longitude)
+        private async Task<Maybe<LocationResponse>> RetryGetAsync(string address, double latitude, double longitude)
         {
             var retries = _settings.RetriesCount <= 0 ? 0 : _settings.RetriesCount;
             var retriesDelay = _settings.RetriesDelay <= 0 ? 500 : _settings.RetriesDelay;
             var retryPolicy = Policy
-                .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                .WaitAndRetryAsync<HttpResponseMessage>(retries, 
+                .HandleResult<Maybe<LocationResponse>>(r => r.HasNoValue || 
+                    r.Value.Results == null || !r.Value.Results.Any())
+                .WaitAndRetryAsync<Maybe<LocationResponse>>(retries, 
                     retryAttempt => TimeSpan.FromMilliseconds(retriesDelay));
+
+            return await retryPolicy.ExecuteAsync(async () => await GetAsync(address, latitude, longitude));
+        }
+
+        private async Task<Maybe<LocationResponse>> GetAsync(string address, double latitude, double longitude)
+        {
+            var retryPolicy = Policy
+                .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
+                .WaitAndRetryAsync<HttpResponseMessage>(2, 
+                    retryAttempt => TimeSpan.FromMilliseconds(500));
             var response = await retryPolicy.ExecuteAsync(async () => 
             {
                 var query = address.Empty() ? $"latlng={latitude},{longitude}" : $"address={address}";

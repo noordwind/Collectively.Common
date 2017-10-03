@@ -14,6 +14,7 @@ namespace Collectively.Common.Caching
     {
         private readonly ILogger Logger = Log.Logger;
         private bool _available;
+        private readonly bool _enabled;
         private readonly IDatabase _database;
         private readonly RedisSettings _settings;
 
@@ -21,6 +22,7 @@ namespace Collectively.Common.Caching
         {
             _database = database.HasValue ? database.Value.Database : null;
             _settings = settings;
+            _enabled = _settings.Enabled;
             _available = _database != null && _settings.Enabled;
         }
 
@@ -129,6 +131,10 @@ namespace Collectively.Common.Caching
 
         private async Task TryExecuteAsync(Func<IDatabase, Task> database)
         {
+            if (!_enabled)
+            {
+                return;
+            } 
             try
             {
                 await database(_database);
@@ -150,7 +156,7 @@ namespace Collectively.Common.Caching
 
         private async Task<T> TryExecuteAsync<T>(Func<IDatabase,Task<T>> database)
         {
-            if (!_available)
+            if (!_enabled)
             {
                 return default(T);
             } 
