@@ -33,7 +33,7 @@ namespace Collectively.Common.Security
                 credentials.Password.Equals(_serviceSettings.Password))
             {
                 var token = _jwtTokenHandler.Create(credentials.Username, string.Empty, 
-                    TimeSpan.FromDays(10000));
+                    TimeSpan.FromDays(1000));
 
                 return token.Value;
             }
