@@ -196,7 +196,7 @@ namespace Collectively.Common.ServiceClients
                 });
                 if (authenticationToken.HasNoValue)
                 {
-                    throw new AuthenticationException("Could not get authentication token for service: '{settings.Name}'.");
+                    throw new AuthenticationException($"Could not get authentication token for service: '{settings.Name}'.");
                 }
                 token = authenticationToken.Value.Token;
                 _authenticatedServices[settings.Name] = token;
