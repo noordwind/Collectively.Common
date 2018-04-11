@@ -97,32 +97,30 @@ namespace Collectively.Common.Security
 
         public Maybe<JwtBasic> Create(string userId, string role, TimeSpan? expiry = null, string state = "active")
         {
-            var nowUtc = DateTime.UtcNow;
-            var expires = (expiry.HasValue ? 
-                nowUtc.AddTicks(expiry.Value.Ticks) : 
-                nowUtc.AddDays(_settings.ExpiryDays));
-            var centuryBegin = new DateTime(1970, 1, 1).ToUniversalTime();
-            var exp = (long)(new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
-            var now = (long)(new TimeSpan(nowUtc.Ticks - centuryBegin.Ticks).TotalSeconds);
-            var issuer = _settings.Issuer ?? string.Empty;
-            var payload = new JwtPayload
+            var now = DateTime.UtcNow;
+            var claims = new Claim[]
             {
-                {"sub", userId},
-                {"iss", issuer},
-                {"iat", now},
-                {"exp", exp},
-                {"jti", Guid.NewGuid().ToString("N")},
-                {"unique_name", userId},
-                {StateClaim, state},
-                {RoleClaim, role}
+                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString()),
+                new Claim(ClaimTypes.Role, role),
+                new Claim(StateClaim, state)
             };
-            var jwt = new JwtSecurityToken(_jwtHeader, payload);
-            var token = _jwtSecurityTokenHandler.WriteToken(jwt);
+            var expires = now.AddDays(_settings.ExpiryDays);
+            var jwt = new JwtSecurityToken(
+                issuer: _settings.Issuer,
+                claims: claims,
+                notBefore: now,
+                expires: expires,
+                signingCredentials: _signingCredentials
+            );
+            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             return new JwtBasic
             {
                 Token = token,
-                Expires = exp
+                Expires = expires.ToTimestamp()
             };
         }
 
