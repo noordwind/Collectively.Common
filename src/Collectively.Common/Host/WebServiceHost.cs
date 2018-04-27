@@ -35,9 +35,8 @@ namespace Collectively.Common.Host
                 name = $"Collectively Service: {typeof(TStartup).Namespace.Split('.').Last()}";
             }            
             Console.Title = name;
-            var webHost = new WebHostBuilder()
+            var webHost = WebHost.CreateDefaultBuilder(args)
                 .UseStartup<TStartup>()
-                .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseConfiguration(new ConfigurationBuilder()
                 .AddEnvironmentVariables()
@@ -55,11 +54,11 @@ namespace Collectively.Common.Host
                     }
                     if (!useLockbox)
                     {
-                        return;
-                    }
-                    if (env.IsProduction() || env.IsDevelopment())
-                    {
-                        config.AddLockbox();
+                        useLockbox = Environment.GetEnvironmentVariable("USE_LOCKBOX")?.ToLowerInvariant() == "true";
+                        if (useLockbox)
+                        {
+                            config.AddLockbox();
+                        }
                     }
                 })
                 .UseIISIntegration()
