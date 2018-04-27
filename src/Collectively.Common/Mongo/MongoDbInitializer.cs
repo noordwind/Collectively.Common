@@ -22,10 +22,7 @@ namespace Collectively.Common.Mongo
                 return;
 
             RegisterConventions();
-            var collections = await _database.ListCollectionsAsync();
-            var exists = await collections.AnyAsync();
-            if(exists)
-                return;
+            await Task.CompletedTask;
         }
 
         private void RegisterConventions()
